@@ -1,0 +1,39 @@
+# Planning
+
+Planning refers to how an agent reasons about what to do — decomposing a goal into steps, deciding which actions to take, and adapting when things go wrong. It is one of the core competencies that separates capable agents from reactive chatbots.
+
+## ReAct
+
+ReAct (Reason + Act) is the most common pattern: the model interleaves reasoning traces ("I should look up X before trying Y") with tool calls. This makes the agent's logic auditable and gives the model a scratchpad to work through complex sub-problems before committing to an action.
+
+Most modern agent frameworks use a ReAct-style loop by default, even if they don't name it as such.
+
+## Chain-of-Thought and Extended Thinking
+
+Chain-of-thought prompting encourages the model to reason step-by-step before answering. Extended thinking (available in some models, including Claude) gives the model a dedicated reasoning phase that happens before the visible response is generated. This substantially improves performance on tasks requiring multi-step reasoning or careful planning.
+
+## Task Decomposition
+
+For complex goals, agents often benefit from explicit decomposition: breaking the task into a list of sub-tasks before beginning execution. This can be done in a single planning step at the start, or dynamically as sub-tasks are discovered during execution.
+
+**Plan-then-execute**: generate a full plan upfront, then execute each step. Clear, but brittle when the world doesn't match the plan.
+
+**Dynamic planning**: update the plan at each step based on observations. More robust, but harder to track and audit.
+
+## Failure Modes
+
+- **Horizon collapse**: the agent solves a sub-problem well but loses track of the overall goal.
+- **Overplanning**: spending too many steps in planning rather than acting.
+- **Irreversible errors**: taking an action that makes the original goal impossible to achieve (e.g., deleting a file needed later).
+- **Stuck loops**: repeatedly calling the same tool with the same arguments when it fails.
+
+## Human-in-the-Loop
+
+For high-stakes or high-uncertainty tasks, agents should pause and ask for human confirmation before irreversible actions. This is a planning-level decision: the agent needs to recognize when uncertainty is high enough to warrant interruption. See [Agentic Loop](agentic-loop.md).
+
+## See Also
+
+- [Agentic Loop](agentic-loop.md)
+- [Tool Use](tool-use.md)
+- [Multi-Agent Coordination](multi-agent.md)
+- [Evaluation](evaluation.md)
