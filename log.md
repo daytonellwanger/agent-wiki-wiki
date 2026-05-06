@@ -1,5 +1,13 @@
 # Log
 
+## [2026-05-06]
+
+**Source:** Official Claude Code documentation at code.claude.com/docs/en/sub-agents and code.claude.com/docs/en/agent-sdk/subagents; official agent teams documentation at code.claude.com/docs/en/agent-teams.
+
+**Technical:** Pages created: tools/claude-code-subagents.md (new). Pages updated: tools/claude-code.md (subagents bullet expanded, See Also extended), concepts/multi-agent.md (Claude Code Subagents linked in Orchestrator + Subagents section, See Also extended), index.md (new Claude Code Subagents entry added).
+
+**Summary:** Claude Code has a fully documented, production-grade subagent system built around the Agent tool (renamed from Task tool in v2.1.63). The main session can delegate subtasks to child agents that each run in an isolated context window, keeping verbose intermediate output out of the main conversation. Custom subagents are defined as Markdown files with YAML frontmatter and can be scoped to a project (checked into version control), a user, an org, or a single session. The description field is the primary mechanism: Claude reads it to decide when to delegate automatically. Notable capabilities include per-subagent model selection (route exploration to Haiku, heavy analysis to Opus), tool allowlists/denylists, permission mode overrides, persistent memory across sessions, lifecycle hooks, MCP server scoping, and worktree isolation for parallel file edits. Foreground and background execution modes let the user continue working while a subagent runs. A newer experimental "fork" mode (v2.1.117+) lets a subagent inherit the full parent conversation history — trading context isolation for continuity, and reusing the parent's prompt cache to reduce cost. Agent teams, a separate experimental feature, extends this with peer-to-peer messaging and a shared task list for workflows requiring inter-agent coordination; subagents remain the right tool for focused, self-contained delegation.
+
 ## [2026-05-04]
 
 **Source:** Initial population — seeded from model knowledge (knowledge cutoff: August 2025)

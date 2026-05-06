@@ -8,7 +8,7 @@ Multi-agent systems use multiple LLM instances — each with its own context, ro
 
 An orchestrator agent decomposes a task, delegates sub-tasks to specialized subagents, and synthesizes results. The subagents may have narrower tool access and more specific instructions than the orchestrator.
 
-This is the most common pattern in production. [LangGraph](../tools/langgraph.md) and [OpenAI Agents SDK](../tools/openai-agents-sdk.md) both provide primitives for it.
+This is the most common pattern in production. [LangGraph](../tools/langgraph.md) and [OpenAI Agents SDK](../tools/openai-agents-sdk.md) both provide primitives for it. [Claude Code Subagents](../tools/claude-code-subagents.md) is a well-documented, production-grade implementation: the main session delegates to named child agents (Explore, Plan, General-purpose, or custom) each running in its own context window with scoped tool access.
 
 ### Parallel Workers
 
@@ -43,6 +43,7 @@ Avoid it when a single capable agent would do — the coordination overhead is r
 
 - [Agentic Loop](agentic-loop.md)
 - [Planning](planning.md)
+- [Claude Code Subagents](../tools/claude-code-subagents.md)
 - [LangGraph](../tools/langgraph.md)
 - [OpenAI Agents SDK](../tools/openai-agents-sdk.md)
 - [AutoGen](../tools/autogen.md)

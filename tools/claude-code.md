@@ -23,7 +23,7 @@ Claude Code runs as a CLI process that wraps the Claude API. Each conversation i
 
 - **Permission model**: the user approves or denies individual tool calls, with configurable auto-approval for safe operations. This gives human oversight without requiring constant interruption.
 - **CLAUDE.md**: a per-project (or per-user) markdown file that provides the model with project-specific instructions, conventions, and context. Read at the start of each session.
-- **Subagents**: Claude Code supports spawning subagents (via the Agent SDK) for parallelism or context isolation.
+- **Subagents**: Claude Code supports spawning subagents via the **Agent tool** (renamed from Task tool in v2.1.63) for parallelism and context isolation. Custom subagents are defined as Markdown files with YAML frontmatter in `.claude/agents/` or `~/.claude/agents/`. See [Claude Code Subagents](claude-code-subagents.md) for full coverage.
 - **Extended thinking**: Claude Code can use Claude's extended thinking mode for complex reasoning tasks.
 
 ## IDE Integration
@@ -32,7 +32,9 @@ Available as extensions for VS Code and JetBrains IDEs, embedding the CLI experi
 
 ## See Also
 
+- [Claude Code Subagents](claude-code-subagents.md)
 - [Model Context Protocol (MCP)](mcp.md)
 - [Tool Use](../concepts/tool-use.md)
 - [Agentic Loop](../concepts/agentic-loop.md)
 - [Context Management](../concepts/context-management.md)
+- [Multi-Agent Coordination](../concepts/multi-agent.md)

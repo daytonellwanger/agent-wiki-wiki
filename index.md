@@ -15,6 +15,7 @@
 
 - [Model Context Protocol (MCP)](tools/mcp.md) — Open protocol for connecting tools and resources to LLMs
 - [Claude Code](tools/claude-code.md) — Anthropic's agentic coding CLI and IDE extension
+- [Claude Code Subagents](tools/claude-code-subagents.md) — The Agent tool system for spawning specialized child agents within a Claude Code session
 - [OpenAI Agents SDK](tools/openai-agents-sdk.md) — OpenAI's Python SDK for building agents with tools and handoffs
 - [LangGraph](tools/langgraph.md) — Graph-based stateful orchestration framework from LangChain
 - [LangChain](tools/langchain.md) — Foundational LLM application framework with broad integrations
