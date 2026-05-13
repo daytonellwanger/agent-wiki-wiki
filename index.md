@@ -16,6 +16,8 @@
 - [Model Context Protocol (MCP)](tools/mcp.md) — Open protocol for connecting tools and resources to LLMs
 - [Claude Code](tools/claude-code.md) — Anthropic's agentic coding CLI and IDE extension
 - [Claude Code Subagents](tools/claude-code-subagents.md) — The Agent tool system for spawning specialized child agents within a Claude Code session
+- [Claude Agent SDK](tools/claude-agent-sdk.md) — Python/TypeScript SDK for running Claude Code's agent loop programmatically in headless or server contexts
+- [Managed Agents](tools/claude-managed-agents.md) — Anthropic-hosted REST API for running agents without operating container infrastructure
 - [OpenAI Agents SDK](tools/openai-agents-sdk.md) — OpenAI's Python SDK for building agents with tools and handoffs
 - [LangGraph](tools/langgraph.md) — Graph-based stateful orchestration framework from LangChain
 - [LangChain](tools/langchain.md) — Foundational LLM application framework with broad integrations
@@ -23,3 +25,5 @@
 - [CrewAI](tools/crew-ai.md) — Role-based multi-agent framework organized around crew personas
 
 ## Questions
+
+- [How do you move an agentic Claude Code workflow to a programmable server environment?](questions/claude-code-to-sdk.md) — Translating CLAUDE.md, subagents, and skills to the Claude Agent SDK or Managed Agents
