@@ -23,7 +23,9 @@
 - [LangChain](tools/langchain.md) — Foundational LLM application framework with broad integrations
 - [AutoGen](tools/autogen.md) — Microsoft's conversational multi-agent framework
 - [CrewAI](tools/crew-ai.md) — Role-based multi-agent framework organized around crew personas
+- [Anthropic Client SDK](tools/anthropic-client-sdk.md) — Low-level Python/TypeScript library for direct Anthropic Messages API access
 
 ## Questions
 
 - [How do you move an agentic Claude Code workflow to a programmable server environment?](questions/claude-code-to-sdk.md) — Translating CLAUDE.md, subagents, and skills to the Claude Agent SDK or Managed Agents
+- [When does the Claude Agent SDK fall short, and what are the alternatives?](questions/claude-agent-sdk-limits.md) — Structural limits of the SDK's agentic loop and what frameworks fill the gaps

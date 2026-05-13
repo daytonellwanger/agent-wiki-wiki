@@ -1,5 +1,11 @@
 # Log
 
+## [2026-05-13]
+
+**Technical:** Pages created: questions/claude-agent-sdk-limits.md (new), tools/anthropic-client-sdk.md (new). Pages updated: index.md (new question entry, new Anthropic Client SDK tool entry).
+
+**Summary:** Added a new question: when does the Claude Agent SDK fall short, and what are the alternatives? The answer identifies four structural constraints: (1) the open-ended agentic loop is wrong for auditable, deterministic pipelines — LangGraph is the alternative; (2) one-level subagent nesting rules out deep hierarchies or peer-based coordination — LangGraph subgraphs or AutoGen fill the gap; (3) ~12s-per-query subprocess startup plus opaque model calls make the SDK unsuitable for low-latency APIs or fine-grained prompt control — the Anthropic client SDK (direct Messages API) is the right tool there; (4) Claude-only model support rules out multi-provider pipelines — LangGraph/LangChain handle those. Added a new Anthropic Client SDK tool page to cover the direct Messages API library, which the wiki previously described only in contrast to the Agent SDK.
+
 ## [2026-05-11]
 
 **Source:** Official Claude Agent SDK documentation at code.claude.com/docs/en/agent-sdk; Managed Agents documentation at platform.claude.com/docs/en/managed-agents; Claude Code headless documentation at code.claude.com/docs/en/headless.
