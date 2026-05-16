@@ -1,5 +1,11 @@
 # Log
 
+## [2026-05-16]
+
+**Technical:** Pages created: tools/pi.md (new). Pages updated: index.md (new Pi entry under Tools), tools/claude-code.md (Pi added to See Also).
+
+**Summary:** Added a tool page for Pi, an open-source coding agent harness built by Mario Zechner and released in late 2025. Pi takes a deliberate minimalist position: a system prompt under 1,000 tokens, four built-in tools (read/write/edit/bash), no MCP, no sub-agents, no plan mode — all by design. Its core bet is that RL-trained frontier models need thin scaffolding, not thick orchestration, and that the context window is the real bottleneck. Pi supports 15+ LLM providers through a unified API layer and allows self-extension via runtime-compiled TypeScript hooks. The framework gained wide visibility in January 2026 when OpenClaw (a multi-platform communication agent built on Pi's SDK) went viral. In April 2026, startup Earendil acquired Pi and launched Lefos, a cloud platform built on top of it. Pi occupies a distinct niche from Claude Code (productized, Anthropic-native) and LangGraph (Python, state-machine orchestration) — it is a hackable harness for teams that want multi-provider support and full control over agent behavior.
+
 ## [2026-05-13]
 
 **Technical:** Pages created: questions/claude-agent-sdk-limits.md (new), tools/anthropic-client-sdk.md (new). Pages updated: index.md (new question entry, new Anthropic Client SDK tool entry).

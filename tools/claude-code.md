@@ -38,3 +38,4 @@ Available as extensions for VS Code and JetBrains IDEs, embedding the CLI experi
 - [Agentic Loop](../concepts/agentic-loop.md)
 - [Context Management](../concepts/context-management.md)
 - [Multi-Agent Coordination](../concepts/multi-agent.md)
+- [Pi](pi.md) — Minimalist open-source alternative; multi-provider, no vendor-enforced behavior

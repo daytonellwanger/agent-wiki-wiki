@@ -24,6 +24,7 @@
 - [AutoGen](tools/autogen.md) — Microsoft's conversational multi-agent framework
 - [CrewAI](tools/crew-ai.md) — Role-based multi-agent framework organized around crew personas
 - [Anthropic Client SDK](tools/anthropic-client-sdk.md) — Low-level Python/TypeScript library for direct Anthropic Messages API access
+- [Pi](tools/pi.md) — Minimalist open-source coding agent harness prioritizing token efficiency and operator control
 
 ## Questions
 
