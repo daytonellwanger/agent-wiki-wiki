@@ -37,5 +37,6 @@ Available as extensions for VS Code and JetBrains IDEs, embedding the CLI experi
 - [Tool Use](../concepts/tool-use.md)
 - [Agentic Loop](../concepts/agentic-loop.md)
 - [Context Management](../concepts/context-management.md)
+- [Progressive Disclosure](../concepts/progressive-disclosure.md) — Design principle behind Agent Skills and on-demand context loading
 - [Multi-Agent Coordination](../concepts/multi-agent.md)
 - [Pi](pi.md) — Minimalist open-source alternative; multi-provider, no vendor-enforced behavior

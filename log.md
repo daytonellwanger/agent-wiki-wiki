@@ -1,5 +1,11 @@
 # Log
 
+## [2026-05-16] — Progressive Disclosure
+
+**Technical:** Pages created: concepts/progressive-disclosure.md (new). Pages updated: index.md (new Progressive Disclosure entry under Concepts), concepts/context-management.md (Progressive Disclosure added to See Also), tools/claude-code.md (Progressive Disclosure added to See Also).
+
+**Summary:** Added a concept page for Progressive Disclosure — the architectural pattern for loading agent context and capabilities on demand rather than all at once. The core problem it addresses is context bloat: agents that load all tools and documentation upfront face attention dilution, instruction interference, and tool schema bloat (50,000+ tokens of JSON before reasoning begins). The page covers three main patterns: the Agent Skills three-tier architecture (metadata always loaded, full instructions only on activation, resources only when referenced), which cuts token consumption by ~85%; index-first loading, where an agent receives a structured index and fetches only relevant files; and phase-based loading, where context is swapped per task phase rather than accumulated. Key tradeoffs: implicit activation is unreliable without explicit fallback instructions (44% activation rate in Vercel evals), and on-demand content loading is a prompt-injection vector.
+
 ## [2026-05-16]
 
 **Technical:** Pages created: tools/pi.md (new). Pages updated: index.md (new Pi entry under Tools), tools/claude-code.md (Pi added to See Also).

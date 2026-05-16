@@ -42,3 +42,4 @@ Leading models have context windows of 128k–1M+ tokens. While large windows re
 - [Memory](memory.md)
 - [Agentic Loop](agentic-loop.md)
 - [Evaluation](evaluation.md)
+- [Progressive Disclosure](progressive-disclosure.md) — Architectural pattern for loading agent context and capabilities on demand rather than all at once

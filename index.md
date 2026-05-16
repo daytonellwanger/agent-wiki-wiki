@@ -8,6 +8,7 @@
 - [Planning](concepts/planning.md) — How agents decompose goals and reason about multi-step tasks
 - [Multi-Agent Coordination](concepts/multi-agent.md) — Architectures where multiple agents collaborate
 - [Context Management](concepts/context-management.md) — Managing context window limits, compaction, and retrieval
+- [Progressive Disclosure](concepts/progressive-disclosure.md) — Revealing complexity incrementally to the context window
 - [Computer Use](concepts/computer-use.md) — Agents that interact with GUIs and desktop environments
 - [Evaluation](concepts/evaluation.md) — Measuring agent performance: trajectories, outcomes, and benchmarks
 
