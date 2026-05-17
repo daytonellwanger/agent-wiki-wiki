@@ -27,6 +27,10 @@
 - [Anthropic Client SDK](tools/anthropic-client-sdk.md) — Low-level Python/TypeScript library for direct Anthropic Messages API access
 - [Pi](tools/pi.md) — Minimalist open-source coding agent harness prioritizing token efficiency and operator control
 
+## Opinions
+
+- [The Agentic Loop Itself Is Simple](opinions/the-agentic-loop-is-simple.md) — A functional agent can be built in under 400 lines; complexity lives at the product layer, not in the core loop
+
 ## Questions
 
 - [How do you move an agentic Claude Code workflow to a programmable server environment?](questions/claude-code-to-sdk.md) — Translating CLAUDE.md, subagents, and skills to the Claude Agent SDK or Managed Agents

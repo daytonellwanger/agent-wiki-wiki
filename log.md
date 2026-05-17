@@ -1,5 +1,11 @@
 # Log
 
+## [2026-05-17] — The agentic loop is simple
+
+**Technical:** Pages created: opinions/the-agentic-loop-is-simple.md (new). Pages updated: index.md (new Opinions section with first entry).
+
+**Summary:** Added the first opinion page: the agentic loop itself is simple. Prompted by Amp's published walkthrough showing a functional code-editing agent in under 400 lines. The core claim is that the mechanism — an LLM, a loop, and a tool-calling protocol — is not complex; it is a communication convention between model and executor. The genuine engineering difficulty in production agents (editor integration, system prompt tuning, multi-agent coordination, latency, reliability) lives at the product layer, not in the loop. The counterarguments acknowledge that simple to implement is not simple to get right, and that tool interface design involves real judgment even when the loop itself is straightforward.
+
 ## [2026-05-16] — Subagent vs. referenced instruction file
 
 **Technical:** Pages created: questions/subagent-vs-claude-md.md (new). Pages updated: index.md (new question entry).
