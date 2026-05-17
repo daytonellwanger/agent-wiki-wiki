@@ -1,5 +1,11 @@
 # Log
 
+## [2026-05-16] — Subagent vs. referenced instruction file
+
+**Technical:** Pages created: questions/subagent-vs-claude-md.md (new). Pages updated: index.md (new question entry).
+
+**Summary:** Added a new question: when should you use a subagent rather than having CLAUDE.md reference a separate markdown instruction file that Claude reads on demand? Both approaches achieve progressive disclosure — neither loads instructions until they're needed. The real differentiators are context isolation (a subagent's intermediate tool calls stay out of the main thread; a referenced file's work accumulates there), enforceability (a subagent can restrict its tool allowlist; a referenced file cannot), model selection (subagents can run on a cheaper or more powerful model), and parallelism (subagents can run concurrently; referenced file work is sequential). The referenced-file approach has its own advantages: simpler, no delegation boundary, and the parent sees all intermediate results — which makes it better when iterative refinement is expected. The practical frame: a referenced markdown file is an instruction Claude reads and follows; a subagent is a capability Claude delegates to.
+
 ## [2026-05-16] — Progressive Disclosure
 
 **Technical:** Pages created: concepts/progressive-disclosure.md (new). Pages updated: index.md (new Progressive Disclosure entry under Concepts), concepts/context-management.md (Progressive Disclosure added to See Also), tools/claude-code.md (Progressive Disclosure added to See Also).

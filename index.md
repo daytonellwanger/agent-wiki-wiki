@@ -31,3 +31,4 @@
 
 - [How do you move an agentic Claude Code workflow to a programmable server environment?](questions/claude-code-to-sdk.md) — Translating CLAUDE.md, subagents, and skills to the Claude Agent SDK or Managed Agents
 - [When does the Claude Agent SDK fall short, and what are the alternatives?](questions/claude-agent-sdk-limits.md) — Structural limits of the SDK's agentic loop and what frameworks fill the gaps
+- [When should you use a subagent rather than having CLAUDE.md reference a separate instruction file?](questions/subagent-vs-claude-md.md) — Both load instructions on demand; subagents add context isolation, tool restrictions, model selection, and parallelism
