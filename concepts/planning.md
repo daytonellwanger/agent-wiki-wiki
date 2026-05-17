@@ -27,6 +27,12 @@ For complex goals, agents often benefit from explicit decomposition: breaking th
 - **Irreversible errors**: taking an action that makes the original goal impossible to achieve (e.g., deleting a file needed later).
 - **Stuck loops**: repeatedly calling the same tool with the same arguments when it fails.
 
+## Input Quality Is a Prerequisite
+
+An agent's planning is only as good as the goal it receives. Vague or ambiguous task descriptions don't become precise once they enter an agent — they produce vague plans, vague tool calls, and vague outputs. This mirrors the Theory of Constraints insight that bottlenecks require "predictable, high-quality inputs": you don't fix slow legal review by adding more lawyers; you fix it by ensuring complete documentation arrives at that stage. The same logic applies to agents — speeding up execution doesn't help if the goal specification is the real constraint.
+
+In practice this means the human-facing interface (how tasks are specified, what context is provided, how success is defined) is often more important to agent performance than any architectural choice inside the agent. Agents deployed in organizational workflows that have ambiguous upstream processes will reproduce those ambiguities, not resolve them. See [Evaluation](evaluation.md) for the related principle that you must define success before you can measure it.
+
 ## Human-in-the-Loop
 
 For high-stakes or high-uncertainty tasks, agents should pause and ask for human confirmation before irreversible actions. This is a planning-level decision: the agent needs to recognize when uncertainty is high enough to warrant interruption. See [Agentic Loop](agentic-loop.md).

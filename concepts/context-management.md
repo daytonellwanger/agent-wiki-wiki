@@ -33,6 +33,8 @@ Tool calls can return very large outputs (e.g., a full file, a large API respons
 - For file content, include only the relevant sections.
 - Store large outputs externally and give the agent a reference it can use to retrieve specific parts.
 
+A concrete example of retrieval-based output management for code: [Semble](../tools/semble.md) replaces the common grep-then-read-whole-file pattern with a hybrid semantic/BM25 search that returns only the relevant code snippets. At 2k tokens it achieves 94% recall; the grep+read baseline requires ~100k tokens for equivalent recall.
+
 ## Context Window Sizes (as of 2025)
 
 Leading models have context windows of 128k–1M+ tokens. While large windows reduce the frequency of compaction events, they don't eliminate the need for context management: performance degrades in very long contexts, and cost scales with tokens.
@@ -43,3 +45,4 @@ Leading models have context windows of 128k–1M+ tokens. While large windows re
 - [Agentic Loop](agentic-loop.md)
 - [Evaluation](evaluation.md)
 - [Progressive Disclosure](progressive-disclosure.md) — Architectural pattern for loading agent context and capabilities on demand rather than all at once
+- [Semble](../tools/semble.md) — Code search tool that returns ranked snippets instead of whole files, keeping coding-agent context lean

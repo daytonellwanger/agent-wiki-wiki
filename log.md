@@ -1,5 +1,21 @@
 # Log
 
+## [2026-05-17] — Input quality as a planning and evaluation prerequisite
+
+**Source:** HN post "I don't think AI will make your processes go faster" (https://news.ycombinator.com/item?id=48168221); article at frederickvanbrabant.com/blog/2026-05-15-i-dont-think-ai-will-make-your-processes-go-faster/. Score: 411, ~300 comments.
+
+**Technical:** Pages updated: concepts/planning.md (new "Input Quality Is a Prerequisite" section), concepts/evaluation.md (Practical Guidance section expanded with two new bullets).
+
+**Summary:** A widely-upvoted piece arguing that AI doesn't make organizational processes faster because the bottleneck is rarely code execution speed — it's upstream ambiguity (unclear requirements, vague specs, organizational coordination). Drawing on the Theory of Constraints, the author's point is that speeding up a non-bottleneck step has diminishing returns; you need "predictable, high-quality inputs" at the actual constraint. The HN discussion broadly confirmed this, with practitioners noting that senior engineering time is dominated by coordination and buy-in, not coding; that "AI is unveiling how the bureaucracy is the slow part"; and that Amdahl's Law makes optimizing the fast part increasingly irrelevant as the slow parts dominate. Added a new "Input Quality Is a Prerequisite" section to the Planning page: vague goals produce vague agent plans regardless of model quality, and the human-facing task specification interface is often more important than any architectural choice inside the agent. Also sharpened the Evaluation practical guidance to make the connection explicit — the inability to write a clear eval is often a signal that the task itself is underspecified, not that evaluation is inherently hard.
+
+## [2026-05-17] — Semble: code search for agents
+
+**Source:** Show HN: Semble – Code search for agents that uses 98% fewer tokens than grep (https://news.ycombinator.com/item?id=48169874); GitHub repo MinishLab/semble.
+
+**Technical:** Pages created: tools/semble.md (new). Pages updated: index.md (Semble added under Tools), concepts/context-management.md (Semble added as concrete example in Tool Output Management section and in See Also).
+
+**Summary:** Added a tool page for Semble, an open-source Python library that gives coding agents retrieval-based code search as an alternative to grep-then-read-whole-file. The core technique is a two-stage hybrid pipeline: static embeddings (Model2Vec, CPU-only) for semantic matching combined with BM25 for identifier matching, fused via Reciprocal Rank Fusion and reranked with code-aware signals (definition prioritization, identifier stem matching, file coherence boosting, noise penalties for tests/legacy). Against 1,250 queries across 63 repositories it achieves NDCG@10 of 0.854 vs. 0.862 for the leading code-specialized transformer, while indexing 218x faster (263ms vs. 57s) and querying 11x faster (1.5ms vs. 16ms). The token efficiency claim — 94% recall at 2k tokens vs. ~100k tokens for grep+read — is for retrieval only; the HN discussion surfaced that end-to-end agent benchmarks do not yet exist and real savings depend on agent query behavior. Semble ships as an MCP server (one command to add to Claude Code, Cursor, Codex, OpenCode) or as a CLI/Python library. Added a concrete example of retrieval-based output management to the context-management page.
+
 ## [2026-05-17] — The agentic loop is simple
 
 **Technical:** Pages created: opinions/the-agentic-loop-is-simple.md (new). Pages updated: index.md (new Opinions section with first entry).

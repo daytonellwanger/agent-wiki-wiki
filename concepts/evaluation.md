@@ -39,7 +39,8 @@ Benchmark scores are informative but not sufficient — models can overfit to be
 
 ## Practical Guidance
 
-- Define what "success" means before building. If you can't specify it, you can't evaluate it.
+- Define what "success" means before building. If you can't specify it, you can't evaluate it — and the agent can't reliably pursue it.
+- Treat task specification as infrastructure. An agent operating on vague goals will produce vague results regardless of model quality or framework sophistication. The inability to write a clear eval is often a signal that the task itself is underspecified, not that evaluation is hard.
 - Build a small labeled eval set from real user tasks early. Don't wait until the product is deployed.
 - Use outcome-based evaluation as the primary signal; add trajectory evaluation where safety matters.
 - LLM-as-judge is a useful accelerant but needs periodic human calibration.

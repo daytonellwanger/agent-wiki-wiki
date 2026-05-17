@@ -26,6 +26,7 @@
 - [CrewAI](tools/crew-ai.md) — Role-based multi-agent framework organized around crew personas
 - [Anthropic Client SDK](tools/anthropic-client-sdk.md) — Low-level Python/TypeScript library for direct Anthropic Messages API access
 - [Pi](tools/pi.md) — Minimalist open-source coding agent harness prioritizing token efficiency and operator control
+- [Semble](tools/semble.md) — Code search for agents: hybrid semantic/BM25 retrieval that returns ranked snippets instead of whole files, cutting token usage ~98% vs. grep+read
 
 ## Opinions
 
