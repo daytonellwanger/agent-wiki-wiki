@@ -24,6 +24,8 @@ MCP supports two transport mechanisms:
 
 As of 2025, MCP has seen significant adoption. Claude Desktop and Claude Code support it natively. Many third-party tool providers have published MCP servers. The major agent frameworks ([LangGraph](langgraph.md), [OpenAI Agents SDK](openai-agents-sdk.md)) have added MCP support.
 
+In May 2026, Anthropic acquired Stainless — the company that had been building the official Anthropic SDKs and MCP server tooling used by hundreds of companies. The acquisition signals that Anthropic views SDK and MCP server quality as strategic infrastructure, not a commodity concern. Katelyn Lesse, Anthropic's Head of Platform Engineering, framed the rationale: "Agents are only as useful as what they can connect to."
+
 ## Tradeoffs
 
 **Pros**: interoperability, ecosystem leverage, standardized discovery.

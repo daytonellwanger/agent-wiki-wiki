@@ -25,7 +25,7 @@ For complex goals, agents often benefit from explicit decomposition: breaking th
 - **Horizon collapse**: the agent solves a sub-problem well but loses track of the overall goal.
 - **Overplanning**: spending too many steps in planning rather than acting.
 - **Irreversible errors**: taking an action that makes the original goal impossible to achieve (e.g., deleting a file needed later).
-- **Stuck loops**: repeatedly calling the same tool with the same arguments when it fails.
+- **Stuck loops**: repeatedly calling the same tool with the same arguments when it fails. In open-ended autonomous operation (no fixed goal, no human-in-the-loop), a related but distinct form appears: thematic or behavioral fixation, where the agent drifts into a repetitive attractor state — not because a tool is failing, but because there is no external anchor pulling it out. See [Agentic Loop](agentic-loop.md) for more on this failure mode in long-running autonomous contexts.
 
 ## Input Quality Is a Prerequisite
 

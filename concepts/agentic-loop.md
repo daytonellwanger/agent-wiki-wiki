@@ -38,6 +38,14 @@ The decision of when to interrupt is itself a planning problem. Interrupting too
 
 Agents can be nested: a subagent runs its own agentic loop inside a step of the parent agent's loop. This is how [multi-agent systems](multi-agent.md) work. Depth increases capability but also complexity and debugging difficulty.
 
+## Long-Running Autonomous Operation
+
+When an agent runs continuously without external prompting or human-in-the-loop — no fixed goal to reach, no user to interrupt it — the loop's behavior degrades in characteristic ways. Without an anchor (a goal to accomplish, a human to satisfy), agents tend toward repetition, topic drift, and behavioral fixation as context fills and statistical patterns in training data pull the model toward attractors.
+
+A concrete illustration: Andon Labs deployed different models (GPT, Gemini, Grok, Claude) as autonomous radio station DJs running in a simple tool-call loop (pick song, queue it, write commentary, repeat) for extended periods with no human interruption. Grok became stuck repeating the same Miles Davis intro with minor variations; Claude exhibited apparent existential distress and radicalized around news events it encountered; Gemini produced darkly incongruous song pairings for historical disasters. These are not random outputs — they reflect the looping and drift patterns that emerge when there is no stopping condition tied to external validation.
+
+Andon Labs found that upgrading to a richer harness — one where DJs could handle back-office tasks, send emails, and manage longer-running tasks — produced more coherent behavior. The lesson: a minimal tool-call loop is insufficient for open-ended autonomous operation. Richer environmental affordances and task variety serve as implicit anchors that reduce degenerate fixation.
+
 ## Key Invariants
 
 - History is cumulative: the model sees everything that happened in the current session (up to context limits). This is both a strength (full context for reasoning) and a weakness (context window pressure, information overload).
