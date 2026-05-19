@@ -1,5 +1,29 @@
 # Log
 
+## [2026-05-19] — Gemini 3.5 Flash and new agentic benchmarks
+
+**Source:** "Gemini 3.5 Flash" (https://news.ycombinator.com/item?id=48196570); article at blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-5/. Score: 447, 360 comments.
+
+**Technical:** Pages updated: concepts/evaluation.md (Terminal-Bench and MCP Atlas added to Benchmarks section).
+
+**Summary:** Google announced Gemini 3.5 Flash, a model positioned explicitly for agentic use cases — long-horizon task execution, multi-step workflow planning, and subagent coordination. The release benchmarked against Terminal-Bench (command-line and shell task completion) and MCP Atlas (MCP tool invocation and chaining across multi-step tasks), neither of which was previously documented in the wiki. Both are added to the Evaluation page's benchmarks list.
+
+## [2026-05-19] — RLVR and the coding agent reliability threshold (Simon Willison)
+
+**Source:** "The last six months in LLMs in five minutes" (https://news.ycombinator.com/item?id=48188183); article at simonwillison.net/2026/May/19/5-minute-llms/. Score: 725, 550 comments.
+
+**Technical:** Pages updated: concepts/evaluation.md (new "Verifiable Rewards and Model Training" section), overview.md (new "Coding agent reliability" paragraph under Where Things Stand).
+
+**Summary:** Simon Willison's retrospective on the past six months of LLM development argues that two things changed meaningfully in late 2025: coding agents crossed from "often-work" to "mostly-work" for standard software engineering tasks, driven by Reinforcement Learning from Verifiable Rewards (RLVR) training — models trained on binary outcomes (does the code pass tests?) rather than human preference ratings. The HN discussion was mixed: several commenters questioned whether the "inflection point" framing was marketing rather than genuine capability shift, noting that reliability still varies sharply by codebase complexity and task type; others (including a security researcher) confirmed a real inflection point for their own domain. Added RLVR as a concept to the Evaluation page, explaining why tasks amenable to outcome-based evaluation are also the tasks where RLVR training is most effective and where coding agents have improved most. Updated the overview to note the reliability milestone and its scope (clear verifiable tasks yes; open-ended design no).
+
+## [2026-05-19] — Guardrails as a reliability layer for agentic tool calling (Forge)
+
+**Source:** Show HN: "Forge – Guardrails take an 8B model from 53% to 99% on agentic tasks" (https://news.ycombinator.com/item?id=48192383); GitHub repo antoinezambelli/forge. Score: 178, 59 comments.
+
+**Technical:** Pages updated: concepts/tool-use.md (new "Reliability Engineering" section with Guardrail Patterns subsection).
+
+**Summary:** Antoine Zambelli (AI Director at Texas Instruments) published Forge, an open-source reliability framework for self-hosted LLM tool calling. The project's central finding is that structured guardrails — retry, rescue parsing, step enforcement, context management, and mode anchoring — lifted an 8B model (Ministral) from 53% to 99% accuracy across a 26-scenario agentic eval, without changing the model. The most striking finding is that without retry mechanisms, error recovery scores 0% across all tested models — not a capability gap but an architectural absence: if the harness doesn't detect a malformed tool call and re-prompt, the model simply cannot recover. A secondary finding is that serving backend choice can dwarf model choice in impact: the same 12B weights showed a 75-percentage-point accuracy difference across backends depending on whether native function calling or prompt-injection mode was used — a result rarely surfaced in standard benchmarks. The HN discussion surfaced parallel findings from StateWright's research (pushing a 13B model from ~20% to 100% on SWE-bench tasks via structural guardrails), and noted that proxy-mode guardrails sacrifice some multi-turn affordances (step enforcement, context compaction) for drop-in OpenAI API compatibility. Added a new "Reliability Engineering" section to the Tool Use page documenting the magnitude of harness-vs-model performance gaps and the specific guardrail patterns (rescue parsing, retry nudges, step enforcement, context management, mode anchoring) as a composable middleware layer.
+
 ## [2026-05-18] — Multi-agent vulnerability research harness (Project Glasswing / Mythos Preview)
 
 **Source:** HN post "Project Glasswing: what Mythos showed us" (https://news.ycombinator.com/item?id=48179732); article at blog.cloudflare.com/cyber-frontier-models/. Score: 257, 94 comments.

@@ -14,6 +14,8 @@ The core building block is settled: a model in a loop with tools. What remains a
 
 **Planning and reasoning** have improved dramatically with extended thinking / chain-of-thought. Models are better at decomposing tasks, but still fragile on long horizons. See [Planning](concepts/planning.md).
 
+**Coding agent reliability** crossed a meaningful threshold in late 2025. Reinforcement learning from verifiable rewards (RLVR) — training on outcomes like test pass/fail rather than human preference ratings — produced models that practitioners describe as moving from "often-work" to "mostly-work" for standard software engineering tasks. The improvement is most pronounced on tasks with clear verifiable outcomes; tasks requiring open-ended design or ambiguous specification remain unreliable. See [Evaluation](concepts/evaluation.md) for the connection between verifiable rewards and training.
+
 **Computer use** — agents that directly operate GUIs and browsers — is early but moving fast, with Anthropic and OpenAI both investing heavily. See [Computer Use](concepts/computer-use.md).
 
 **Evaluation** remains the hardest unsolved problem. Agents produce long, branching trajectories that are expensive to label and hard to score automatically. LLM-as-judge and trajectory-based evaluation are the current pragmatic approaches. See [Evaluation](concepts/evaluation.md).

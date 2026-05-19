@@ -27,6 +27,26 @@ Tool design matters enormously. A tool is effectively a natural-language API —
 - **Cascading errors**: in long agentic loops, a bad tool call early can send the agent off-track with no natural recovery point.
 - **Security**: tools that write files, send emails, or call external APIs are a significant attack surface. See [Evaluation](evaluation.md) for notes on testing.
 
+## Reliability Engineering
+
+The gap between a naive tool-calling loop and a production-grade one is mostly not about the model — it is about the execution harness. Experimental evidence from Forge (a reliability framework for self-hosted models) illustrates the scale of these gaps:
+
+- Across 97 configurations, adding structured guardrails lifted an 8B model's accuracy from 53% to 99% on a 26-scenario agentic eval — without changing the model or weights.
+- Without retry mechanisms, error recovery scores 0% across all tested models. This is not a capability gap — it is an architectural absence. The model cannot recover from malformed output if the harness doesn't detect the failure and re-prompt.
+- Serving backend choice mattered more than model choice in some configurations: the same 12B weights running in prompt-injection mode vs. native function-calling mode showed a 75-percentage-point accuracy difference across backends.
+
+### Guardrail Patterns
+
+A reliability layer for tool-calling typically includes some combination of:
+
+- **Rescue parsing** — recover from malformed tool calls using heuristic or model-based extraction before giving up
+- **Retry nudges** — on failure, re-prompt with targeted guidance toward correct tool usage rather than generic retries
+- **Step enforcement** — ensure the agent follows required workflow sequences (optional; trading flexibility for reliability)
+- **Context management** — VRAM- or token-budget-aware compaction to prevent context overflow from disrupting long agentic runs
+- **Mode anchoring** — injecting a synthetic "respond" tool to prevent models from exiting tool-calling mode prematurely when tools are still available
+
+These patterns are composable and can be applied as middleware inside a custom orchestration loop without replacing the underlying model or framework.
+
 ## See Also
 
 - [Model Context Protocol (MCP)](../tools/mcp.md)

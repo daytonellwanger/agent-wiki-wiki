@@ -34,8 +34,16 @@ Several benchmarks have emerged specifically for agentic tasks:
 - **SWE-bench**: software engineering tasks (fix this GitHub issue in this repo). Widely used to evaluate coding agents.
 - **WebArena** / **WorkArena**: web browsing and UI interaction tasks.
 - **GAIA**: general assistant tasks requiring tool use and multi-step reasoning.
+- **Terminal-Bench**: command-line and shell task completion. Tests whether an agent can accomplish real terminal workflows end-to-end.
+- **MCP Atlas**: evaluates an agent's ability to correctly invoke and chain MCP tools across multi-step tasks. As [MCP](../tools/mcp.md) adoption has grown, dedicated benchmarks for it have emerged alongside the broader agentic benchmark landscape.
 
 Benchmark scores are informative but not sufficient — models can overfit to benchmark distributions, and benchmark tasks often don't represent your specific production use case.
+
+## Verifiable Rewards and Model Training
+
+Outcome-based evaluation is not only a measurement tool — it is increasingly a training signal. **Reinforcement Learning from Verifiable Rewards (RLVR)** trains models using outcomes that can be checked without a human judge: code that passes or fails tests, math problems with correct or incorrect answers, tool calls that return success or error. Because the reward is binary and unambiguous, RLVR scales without expensive human labeling.
+
+The practical consequence for agent builders: models trained on RLVR objectives (including recent coding-focused variants from Anthropic and OpenAI) are substantially better at tasks where the goal can be specified as a verifiable outcome. This aligns tightly with the outcome-based evaluation approach — tasks amenable to RLVR training are, almost by definition, also the tasks easiest to evaluate in production. As of late 2025, RLVR-trained models showed a noticeable improvement in coding agent reliability: practitioners and commentators described coding agents crossing from "often-work" to "mostly-work" for standard software engineering tasks. The tasks that remain unreliable tend to be those lacking clear verifiable signals — open-ended design, ambiguous requirements, multi-stakeholder coordination — which are also the hardest to evaluate.
 
 ## Practical Guidance
 
