@@ -72,3 +72,4 @@ The result is one of a cluster of AI mathematical achievements in early-mid 2026
 - [Planning](planning.md)
 - [Agentic Loop](agentic-loop.md)
 - [Multi-Agent Coordination](multi-agent.md)
+- [Verifiable Constraints](verifiable-constraints.md) — how mechanically checkable checks guide coding agents at runtime; the operational complement to RLVR

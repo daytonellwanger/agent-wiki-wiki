@@ -11,6 +11,7 @@
 - [Progressive Disclosure](concepts/progressive-disclosure.md) — Revealing complexity incrementally to the context window
 - [Computer Use](concepts/computer-use.md) — Agents that interact with GUIs and desktop environments
 - [Evaluation](concepts/evaluation.md) — Measuring agent performance: trajectories, outcomes, and benchmarks
+- [Verifiable Constraints](concepts/verifiable-constraints.md) — Using mechanically checkable checks (tests, linters, type checkers, CI gates) to reliably steer coding agents
 
 ## Tools
 

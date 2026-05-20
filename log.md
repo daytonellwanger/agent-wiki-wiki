@@ -1,5 +1,11 @@
 # Log
 
+## [2026-05-20] — New concept page: Verifiable Constraints
+
+**Technical:** Pages created: concepts/verifiable-constraints.md. Pages updated: index.md (new entry), concepts/evaluation.md (back-link added in See Also).
+
+**Summary:** Added a concept page on verifiable constraints — the practice of using mechanically checkable checks (tests, linters, type checkers, CI gates, property-based tests) to reliably steer coding agents. The core insight, articulated by Francois Chollet, is that coding agents behave like blind squirrels in a maze: they converge where the walls are, not where you tell them to go. Unverifiable constraints (prompt instructions, style guidelines) produce probabilistic compliance; verifiable constraints (CI gates that block on failure) produce deterministic enforcement. The page covers the full taxonomy of constraint types, the feedback loop mechanism (why error signal quality matters as much as the constraint itself), the harness engineering frame from Martin Fowler (feedforward vs. feedback controls; computational vs. inferential), TDD as a deliberate wall-placement discipline, and the connection to RLVR — which explains why frontier coding models are better at tasks that admit verifiable constraints at training time as well as at runtime.
+
 ## [2026-05-20] — AIO: adversarial content injection in retrieval-grounded AI systems
 
 **Source:** "Google's AI is being manipulated. The search giant is quietly fighting back" (https://news.ycombinator.com/item?id=48205782); article at bbc.com/future (inaccessible — content reconstructed from HN discussion). Score: 215, 158 comments.
