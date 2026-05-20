@@ -12,6 +12,8 @@ Most modern agent frameworks use a ReAct-style loop by default, even if they don
 
 Chain-of-thought prompting encourages the model to reason step-by-step before answering. Extended thinking (available in some models, including Claude) gives the model a dedicated reasoning phase that happens before the visible response is generated. This substantially improves performance on tasks requiring multi-step reasoning or careful planning.
 
+The scale at which extended reasoning can operate has grown substantially. In May 2026, an OpenAI reasoning model produced a 125-page summarized chain of thought while autonomously disproving a 79-year-old open problem in discrete geometry — a qualitatively different scale from what has been publicly documented in standard coding or QA benchmarks. Consistent with this, Anthropic has described its Mythos model as operating at similarly extended reasoning depths. This points to a pattern where the frontier on hard, open-ended reasoning tasks is defined not by model architecture changes but by the length and structure of the reasoning trace the model is allowed to develop.
+
 ## Task Decomposition
 
 For complex goals, agents often benefit from explicit decomposition: breaking the task into a list of sub-tasks before beginning execution. This can be done in a single planning step at the start, or dynamically as sub-tasks are discovered during execution.

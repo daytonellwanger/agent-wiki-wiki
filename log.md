@@ -1,5 +1,37 @@
 # Log
 
+## [2026-05-20] — AIO: adversarial content injection in retrieval-grounded AI systems
+
+**Source:** "Google's AI is being manipulated. The search giant is quietly fighting back" (https://news.ycombinator.com/item?id=48205782); article at bbc.com/future (inaccessible — content reconstructed from HN discussion). Score: 215, 158 comments.
+
+**Technical:** Pages updated: concepts/tool-use.md (new "Retrieval Tools and Adversarial Content" subsection added under Tradeoffs and Failure Modes).
+
+**Summary:** The BBC article (and HN discussion confirming it) documents that retrieval-grounded AI systems are being actively gamed through adversarially crafted web content — fabricated claims placed in high-ranking pages that get retrieved and cited by AI Overviews and similar systems. Individual actors demonstrated that a single blog post is sufficient to corrupt AI-generated summaries on a topic. By 2026 this has matured into a commercial ecosystem ("AIO" — AI Optimization, analogous to SEO), with companies like HubSpot and Semrush already offering paid services for it. The HN discussion was notably technical on the mechanism: csomar noted that ranking in the top 1–20 results for the grounding query is sufficient to poison the LLM overview; simonw documented successfully poisoning Google's results through amateur indexing; Animats provided a concrete false-certainty example (Blue Cruise availability on Ford Bronco). The systemic framing from marginalia_nu was sharp: Google has decades of spam-fighting knowledge but hasn't deployed it here, suggesting profit incentives may deprioritize retrieval quality. Added a new subsection to the Tool Use page documenting this as a distinct attack class (adversarial tool output, not classic prompt injection), the AIO ecosystem as evidence of scale, and current mitigation best practices.
+
+## [2026-05-20] — Structural backpressure: type-system-enforced invariants in AI coding loops
+
+**Source:** "Formal Verification Gates for AI Coding Loops" (https://news.ycombinator.com/item?id=48209323); article at reubenbrooks.dev/blog/structural-backpressure-beats-smarter-agents/. Score: 78, 9 comments.
+
+**Technical:** Pages updated: concepts/agentic-loop.md (new "Structural Constraints in Coding Loops" section; Evaluation added to See Also), overview.md (coding agent reliability paragraph extended with structural gates pointer).
+
+**Summary:** Reuben Brooks argues that for AI-generated production code, structural constraints are more reliable than behavioral (prompt-based) constraints. The core distinction: behavioral gates depend on the model consistently following instructions across thousands of lines of generated code — fragile as context accumulates. Structural gates embed enforcement into the type system and compiler, making it structurally impossible to bypass invariants accidentally rather than merely conventionally wrong. The proposed approach uses a typed code-generation tool (Shen-Backpressure) to express invariants like multi-tenant authorization rules as sealed types with constrained constructors, compiled to Go or TypeScript; alongside a fixed sequence of five verification checkpoints (spec generation, tests, compilation, type-checking, audit) embedded in the loop as required gates.
+
+The HN discussion (small thread) surfaced two useful points: a DevOps practitioner confirmed the pattern, noting their team moved away from LLM-heavy approaches toward deterministic tooling for binary, repeatable answers; a critic noted the approach "moves rather than removes judgment" — the human still encodes the invariants upfront, but a constraint in a type is reviewable and permanent where a prompt rule decays.
+
+This is complementary to the Forge guardrails entry (May 19): Forge covers runtime harness guardrails that wrap the agent loop; structural backpressure covers compile-time and type-system constraints that live inside the codebase the loop is generating. Added a new section to the Agentic Loop page covering this distinction and its connection to verifiable rewards / RLVR training.
+
+## [2026-05-20] — AI autonomously disproves 79-year-old Erdős conjecture
+
+**Source:** "An OpenAI model has disproved a central conjecture in discrete geometry" (https://news.ycombinator.com/item?id=48212493); article at openai.com/index/model-disproves-discrete-geometry-conjecture/ (403 — inaccessible; article content reconstructed from HN discussion and TechCrunch coverage). Score: 354, 224 comments.
+
+**Technical:** Pages updated: concepts/evaluation.md (new "AI on Open Mathematical Problems" section), concepts/planning.md (Chain-of-Thought and Extended Thinking section extended with scale data point), overview.md (Planning and reasoning paragraph updated with this milestone).
+
+**Summary:** An internal OpenAI general-purpose reasoning model autonomously disproved the Erdős unit distance conjecture — an open problem in discrete geometry posed in 1946, unsolved for nearly 80 years. The model constructed an infinite family of point configurations with more unit-distance pairs than the previously best-known square-grid examples, using techniques from algebraic number theory that researchers had not previously applied to the problem. Noga Alon, Melanie Wood, and Thomas Bloom verified the result. OpenAI describes it as the first time AI has autonomously solved a prominent open problem central to a field of mathematics.
+
+Three aspects are most relevant to the wiki. First, the scale of reasoning: the model's summarized chain of thought ran to 125 pages — a qualitatively different scale than what has been publicly documented for standard coding or QA tasks, and consistent with what Anthropic has hinted at for Mythos. Second, cross-domain synthesis: the key mathematical move imported algebraic number theory into a combinatorial geometry problem; HN commenters noted this reflects a form of breadth that individual human specialists rarely have. Third, the general-purpose nature of the model: it was not purpose-built for mathematics or this problem, which distinguishes the result from earlier specialized AI math systems.
+
+The HN discussion added important caveats: the result is a disproof by counterexample rather than a positive proof (structurally simpler); recognizing and verifying the result still required significant domain expertise from supporting mathematicians; and Erdős problems are overrepresented in AI math benchmarks because they are crisply stated and have not had decades of intensely specialized human attention. A mathematics postdoc in the thread expressed genuine excitement while cautioning against over-generalizing to deeper theoretical work. The announcement also carries historical weight: seven months earlier, OpenAI's Kevin Weil falsely claimed GPT-5 had solved ten Erdős problems; Thomas Bloom (one of the verifying mathematicians here) had publicly called that "a dramatic misrepresentation."
+
 ## [2026-05-19] — Gemini 3.5 Flash and new agentic benchmarks
 
 **Source:** "Gemini 3.5 Flash" (https://news.ycombinator.com/item?id=48196570); article at blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-5/. Score: 447, 360 comments.

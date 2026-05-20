@@ -45,6 +45,20 @@ Outcome-based evaluation is not only a measurement tool — it is increasingly a
 
 The practical consequence for agent builders: models trained on RLVR objectives (including recent coding-focused variants from Anthropic and OpenAI) are substantially better at tasks where the goal can be specified as a verifiable outcome. This aligns tightly with the outcome-based evaluation approach — tasks amenable to RLVR training are, almost by definition, also the tasks easiest to evaluate in production. As of late 2025, RLVR-trained models showed a noticeable improvement in coding agent reliability: practitioners and commentators described coding agents crossing from "often-work" to "mostly-work" for standard software engineering tasks. The tasks that remain unreliable tend to be those lacking clear verifiable signals — open-ended design, ambiguous requirements, multi-stakeholder coordination — which are also the hardest to evaluate.
 
+## AI on Open Mathematical Problems
+
+In May 2026, an internal OpenAI general-purpose reasoning model autonomously disproved the Erdős unit distance conjecture — a prominent open problem in discrete geometry posed by Paul Erdős in 1946 and unsolved for nearly 80 years. The model produced an infinite family of point constructions that yield more unit-distance pairs than any previously known example (the longstanding square-grid constructions), using techniques from algebraic number theory that researchers had not previously applied to this geometric problem. OpenAI described it as "the first time AI has autonomously solved a prominent open problem central to a field of mathematics." Supporting mathematicians Noga Alon, Melanie Wood, and Thomas Bloom verified the result.
+
+Several aspects of this result are notable from an agent evaluation perspective:
+
+- **Scale of reasoning**: the model's summarized chain of thought ran to 125 pages — a qualitatively different scale of extended reasoning than what has been publicly documented before, and consistent with what Anthropic has described for its Mythos model.
+- **Cross-domain synthesis**: the key move was importing algebraic number theory into a combinatorial geometry problem. The HN discussion noted that much of the power of reasoning models appears to come from broad training across many fields combined with zero difficulty transferring across domains — a form of breadth that individual human researchers rarely possess.
+- **General-purpose model**: the model used was not purpose-built for mathematics or for this problem. This distinguishes the result from earlier AI math benchmarks that used heavily domain-specialized systems.
+- **Counterexample vs. proof**: the result is a disproof by construction (finding a counterexample), which is structurally different from proving a positive conjecture. A mathematics postdoc commenting on HN noted that finding a counterexample requires sophisticated search; proving a positive result typically requires more theory construction. Several commenters cautioned against generalizing too far from this class of result.
+- **Human role**: recognizing the result as significant, verifying it, and directing the model toward the problem required substantial domain expertise. The model amplified human capability rather than operating independently of it.
+
+The result is one of a cluster of AI mathematical achievements in early-mid 2026 (including earlier Erdős problem results and a Frontier Math open problem result), suggesting that open-problem-solving is becoming a meaningful benchmark category for frontier reasoning models — though commenters noted that Erdős problems are disproportionately represented because they are well-documented, crisply stated, and have not received decades of intensely specialized human attention.
+
 ## Practical Guidance
 
 - Define what "success" means before building. If you can't specify it, you can't evaluate it — and the agent can't reliably pursue it.

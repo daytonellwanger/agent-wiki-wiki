@@ -27,6 +27,20 @@ Tool design matters enormously. A tool is effectively a natural-language API —
 - **Cascading errors**: in long agentic loops, a bad tool call early can send the agent off-track with no natural recovery point.
 - **Security**: tools that write files, send emails, or call external APIs are a significant attack surface. See [Evaluation](evaluation.md) for notes on testing.
 
+### Retrieval Tools and Adversarial Content
+
+Agents that use web retrieval or document-fetching tools face a specific class of attack: adversarial content injected into documents the agent fetches can steer the agent's behavior or corrupt its output. This is distinct from the classic prompt-injection case (malicious instructions injected directly into the prompt) — here the attack travels through the tool's output.
+
+In retrieval-augmented generation pipelines, the attack surface is wide: any content the grounding query returns is trusted input to the model. By 2026 this has matured into a commercial ecosystem called **AIO (AI Optimization)** — services analogous to SEO that help (or charge to help) place content in positions where it will be retrieved and cited by AI systems. Production examples include Google AI Overviews being fed fabricated claims through high-ranking pages, and individual actors demonstrating that a single blog post can be sufficient to corrupt AI-generated summaries on a topic.
+
+Mitigations are still immature. Current best practices include:
+- Treating retrieved content as untrusted data, not trusted context
+- Flagging answers that depend on very few or obscure sources
+- Surfacing source confidence and provenance alongside model answers
+- Applying the same spam and content-quality filters used in search ranking to retrieval pipelines
+
+See also [Progressive Disclosure](progressive-disclosure.md), which notes that on-demand content loading is also a prompt-injection vector.
+
 ## Reliability Engineering
 
 The gap between a naive tool-calling loop and a production-grade one is mostly not about the model — it is about the execution harness. Experimental evidence from Forge (a reliability framework for self-hosted models) illustrates the scale of these gaps:

@@ -46,6 +46,20 @@ A concrete illustration: Andon Labs deployed different models (GPT, Gemini, Grok
 
 Andon Labs found that upgrading to a richer harness — one where DJs could handle back-office tasks, send emails, and manage longer-running tasks — produced more coherent behavior. The lesson: a minimal tool-call loop is insufficient for open-ended autonomous operation. Richer environmental affordances and task variety serve as implicit anchors that reduce degenerate fixation.
 
+## Structural Constraints in Coding Loops
+
+When AI coding agents generate production code, two strategies exist for enforcing correctness invariants: behavioral gates (prompt instructions, checklists) and structural gates (compiler-enforced types, deterministic verification steps).
+
+**Behavioral gates** rely on the model consistently following instructions across potentially thousands of lines of generated code. They degrade as codebases grow and as agents accumulate context. A well-placed instruction in a prompt can be silently ignored or overridden by downstream context.
+
+**Structural gates** move enforcement into the substrate the loop cannot skip: the type system, the compiler, and deterministic tooling. One approach uses typed code generation to express invariants (e.g., multi-tenant authorization rules) as sealed types with unexported fields and constrained constructors, making it structurally impossible to bypass the invariant accidentally rather than just conventionally wrong. Another approach embeds a fixed sequence of verification steps — spec generation, test generation, compilation, type-checking, and audit — as required checkpoints in the loop. Each gate produces a binary pass/fail result; the loop cannot proceed if a gate fails.
+
+The practical distinction: behavioral gates depend on model capability improving and on instructions surviving context accumulation; structural gates work independently of model capability and produce auditable artifacts rather than claims about model reliability.
+
+This connects to [Evaluation](evaluation.md)'s treatment of verifiable rewards: tasks amenable to structural verification (does the code compile? do the types check?) are the same tasks where outcome-based evaluation is cleanest and where RLVR-trained models have improved most. The two patterns are complementary — structural gates make it easier to define the verifiable signal that both the harness and the training process depend on.
+
+Structural constraints are not complete proofs of correctness. The human must still encode the right invariants upfront. The approach prevents *accidental* bypasses; a deliberately wrong invariant produces a wrong but type-safe result. The benefit is that a constraint in a type is reviewable, permanent, and enforced mechanically — whereas a constraint in a prompt decays.
+
 ## Key Invariants
 
 - History is cumulative: the model sees everything that happened in the current session (up to context limits). This is both a strength (full context for reasoning) and a weakness (context window pressure, information overload).
@@ -58,3 +72,4 @@ Andon Labs found that upgrading to a richer harness — one where DJs could hand
 - [Memory](memory.md)
 - [Context Management](context-management.md)
 - [Multi-Agent Coordination](multi-agent.md)
+- [Evaluation](evaluation.md)
