@@ -16,6 +16,15 @@ Tool design matters enormously. A tool is effectively a natural-language API —
 - **Well-described**: the description should say when to use the tool, not just what it does.
 - **Predictable**: side effects should be explicit so the model (and human reviewers) can reason about them.
 
+### Structured Output Schema Design
+
+When tools return structured data (or when agents produce structured outputs via schemas), field type design significantly affects reliability:
+
+- **Prefer enums over open-ended strings** for categorical values. Enum constraints mechanically prevent confabulation — the model cannot invent a value outside the allowed set. Open-ended instructions ("describe the lighting") produce consistent hallucination at scale; a lighting enum (e.g., `natural | artificial | mixed | golden-hour`) does not.
+- **Separate schema from instructions.** Rating or classification criteria should be embedded in the schema documentation, not in the prompt, so they travel with the schema across different call sites. A schema designed for portfolio culling (reject motion blur) has different criteria than one designed for memory preservation; encoding both explicitly prevents context-dependent confabulation.
+
+These lessons are drawn from production use of vision model pipelines generating YAML frontmatter for large media archives, where the cost of open-ended fields is amplified by volume.
+
 ## Model Context Protocol (MCP)
 
 [MCP](../tools/mcp.md) is a standard protocol for connecting tools and resources to agents. Rather than hard-coding tool integrations into each agent, MCP lets tool providers expose a standard interface that any compliant host can consume. It's increasingly the standard layer for tool connectivity.
@@ -40,6 +49,30 @@ Mitigations are still immature. Current best practices include:
 - Applying the same spam and content-quality filters used in search ranking to retrieval pipelines
 
 See also [Progressive Disclosure](progressive-disclosure.md), which notes that on-demand content loading is also a prompt-injection vector.
+
+## Code Execution Sandboxing
+
+Code execution is a foundational tool for coding agents — the ability to run arbitrary code and observe the result. It's the primary mechanism for self-verification, test running, and iterative debugging. But executing untrusted or LLM-generated code safely requires careful isolation.
+
+### Containers vs. MicroVMs
+
+The standard first instinct is to run agent-generated code inside a container (e.g., Docker). Containers are fast to spin up and familiar, but they share the host kernel — a compromised or malicious process can potentially escape to the host or affect other containers. For single-tenant, trusted workloads this is often acceptable; for multi-tenant or truly untrusted code execution it is not.
+
+MicroVMs (such as Firecracker, the engine behind AWS Lambda, or QEMU-based solutions) run each execution environment in a lightweight VM with its own kernel. The attack surface is much smaller: a kernel exploit inside the VM does not reach the host. MicroVMs start in ~100ms and use ~5MB of memory overhead, making them practical even for short-lived agent tasks. This makes microVMs the preferred isolation primitive when execution environment trustworthiness cannot be assumed.
+
+### Docker Sandbox and `sbx`
+
+Docker Desktop ships a sandbox mode (`docker sandbox run`) that provisions microVMs rather than containers for each execution environment, exposed internally via a `/vm` HTTP API over a Unix socket. As of early 2026, Docker released the sandbox engine as a standalone ~50MB binary called `sbx`, which supports macOS, Windows, and Linux. Each microVM gets its own Docker daemon and network traffic is routed through a filtering proxy with HTTPS inspection at `host.docker.internal:3128`. The practical implication: teams building coding agents can use `sbx` to get microVM-level isolation without a full cloud VM setup.
+
+Podman offers a comparable capability on Linux via libkrun, transparently launching microVMs per container without requiring Docker Desktop.
+
+### Outbound Network Control
+
+Even inside a microVM, outbound network access is an important control surface. Agent-generated code can exfiltrate data, reach external APIs, or download further payloads. Production sandboxes typically filter or block outbound traffic by default, or route it through an inspection proxy. Docker's sandbox proxy and similar MITM-inspection layers allow logging and blocking outbound requests without disabling networking entirely — which matters for agents that legitimately need to call package registries or external APIs as part of their task.
+
+### When Sandboxing Matters
+
+Sandbox choice scales with the trust level of the code being executed. For a coding agent working on your own codebase in a controlled environment, container isolation may be sufficient. For platforms running code submitted by end users or generated in response to external inputs (e.g., a coding assistant accessible to the public), microVM isolation is the appropriate default. See also the security notes under [Tool Use tradeoffs](#tradeoffs-and-failure-modes) and [Computer Use](computer-use.md).
 
 ## Reliability Engineering
 

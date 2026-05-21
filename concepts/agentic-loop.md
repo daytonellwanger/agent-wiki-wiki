@@ -60,6 +60,14 @@ This connects to [Evaluation](evaluation.md)'s treatment of verifiable rewards: 
 
 Structural constraints are not complete proofs of correctness. The human must still encode the right invariants upfront. The approach prevents *accidental* bypasses; a deliberately wrong invariant produces a wrong but type-safe result. The benefit is that a constraint in a type is reviewable, permanent, and enforced mechanically — whereas a constraint in a prompt decays.
 
+## Emerging Alternatives to Sequential Execution
+
+The standard agentic loop is fundamentally sequential: each forward pass reads a context window and produces a response; new inputs cannot arrive while the model is generating; the model cannot act while it is thinking. This creates bottlenecks when agents need to respond to new information mid-generation or parallelize reasoning and action.
+
+A 2026 preprint from the Max Planck Institute for Intelligent Systems ("Multi-Stream LLMs", arXiv 2605.12460) proposes switching from instruction-tuning for sequential message formats to instruction-tuning for multiple parallel streams of computation — one per role (thought, input, output). Each forward pass reads from and writes to all streams simultaneously, with causal constraints that prevent outputs from influencing the inputs that produced them. The claimed benefits include: unblocking agents so they can think and act concurrently; improved monitorability (the thought stream is explicitly separate and inspectable); and enhanced security through cleaner role separation. Experiments used a Qwen 27B architecture; results showed maintained task quality with reduced end-to-end latency.
+
+This is an early-stage preprint with limited community validation. The idea warrants attention because it addresses a structural bottleneck in every current agent framework, but the practical impact on agent harnesses (which are not yet instruction-tuned for multi-stream formats) remains to be seen.
+
 ## Key Invariants
 
 - History is cumulative: the model sees everything that happened in the current session (up to context limits). This is both a strength (full context for reasoning) and a weakness (context window pressure, information overload).

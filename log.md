@@ -1,5 +1,29 @@
 # Log
 
+## [2026-05-21] — Code execution sandboxing: containers vs. microVMs for coding agents
+
+**Source:** "We Reverse-Engineered Docker Sandbox's Undocumented MicroVM API" (https://news.ycombinator.com/item?id=48223693); article at rivet.dev/blog/2026-02-04-we-reverse-engineered-docker-sandbox-undocumented-microvm-api/. Score: 62, 5 comments.
+
+**Technical:** Pages updated: concepts/tool-use.md (new "Code Execution Sandboxing" section added before Reliability Engineering).
+
+**Summary:** Rivet reverse-engineered Docker Desktop's internal microVM sandbox API to enable secure code execution for coding agents beyond Docker's officially whitelisted integrations. The durable insight is the container-vs-microVM distinction: containers share the host kernel and are unsuitable for truly untrusted code; microVMs (each with their own kernel, ~100ms startup, ~5MB overhead) provide the right isolation primitive for multi-tenant or externally-submitted code execution. Docker has since released the sandbox engine as a standalone binary called `sbx` (~50MB, supports macOS/Windows/Linux), making microVM isolation accessible without a full cloud VM setup. Podman on Linux offers comparable isolation via libkrun. The HN discussion also flagged outbound network control (filtering proxy with HTTPS inspection) as a key design element. Added a "Code Execution Sandboxing" section to the Tool Use page covering the containers-vs-microVMs tradeoff, Docker's `sbx` and Podman as concrete tools, and outbound network control as a second important isolation layer.
+
+## [2026-05-21] — Structured output schema design: enums and type discipline for hallucination prevention
+
+**Source:** "Indexing a year of video locally on a 2021 MacBook with Gemma4-31B (50GB swap)" (https://news.ycombinator.com/item?id=48222733); article at blog.simbastack.com/indexed-a-year-of-video-locally/. Score: 221, 75 comments.
+
+**Technical:** Pages updated: concepts/tool-use.md (new "Structured Output Schema Design" subsection added under Tool Design).
+
+**Summary:** A developer built a local video indexing pipeline (Gemma 4 31B Q4, LM Studio, ~1,400 lines of Python orchestrated through Claude Code) to make a year of travel footage queryable in plain English. The technical work is application-specific, but the schema design lessons are generalizable and durable: (1) enum constraints on categorical fields mechanically prevent hallucination — open-ended description fields produce confabulation at scale; a fixed enum does not; (2) schema documentation should carry context-dependent criteria (e.g., portfolio culling vs. memory preservation rating scales) rather than relying on prompt instructions that may not be present at every call site. Added these as a new "Structured Output Schema Design" subsection to the Tool Design section of the Tool Use page. The HN discussion noted the post may be AI-written (multiple commenters flagged structural tells), though the author acknowledged it and released the pipeline as an open-source repo (framedex). The core schema design insights hold regardless of authorship.
+
+## [2026-05-21] — Multi-stream LLMs: parallel execution as a structural alternative to sequential agentic loops
+
+**Source:** "Multi-Stream LLMs: new paper on parallelizing/separating prompts, thinking, I/O" (https://news.ycombinator.com/item?id=48227923); paper at arxiv.org/abs/2605.12460 (Max Planck Institute for Intelligent Systems). Score: 17, 1 comment.
+
+**Technical:** Pages updated: concepts/agentic-loop.md (new "Emerging Alternatives to Sequential Execution" section added before Key Invariants).
+
+**Summary:** A preprint from the Max Planck Institute proposes instruction-tuning LLMs for multiple parallel computation streams — thought, input, output — rather than the sequential message formats used today. The key insight is that the sequential loop is not a fundamental constraint but an artifact of how current models are trained: each forward pass could simultaneously read from and write to multiple streams with causal constraints that prevent violations, allowing the model to think and act concurrently and to receive new inputs while generating. The paper reports experiments on a Qwen 27B architecture with maintained task quality and reduced latency, and argues for security and monitorability benefits from explicit stream separation (the thought stream is separately inspectable). The HN thread was minimal (1 comment, OP calling it "big if it holds up"), and the paper is an unreviewed preprint, so the entry treats it as an emerging research direction rather than an established result. Added a section to the Agentic Loop page flagging this as a potential structural shift worth tracking.
+
 ## [2026-05-20] — New concept page: Verifiable Constraints
 
 **Technical:** Pages created: concepts/verifiable-constraints.md. Pages updated: index.md (new entry), concepts/evaluation.md (back-link added in See Also).
