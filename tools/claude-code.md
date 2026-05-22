@@ -30,6 +30,14 @@ Claude Code runs as a CLI process that wraps the Claude API. Each conversation i
 
 Available as extensions for VS Code and JetBrains IDEs, embedding the CLI experience inside the editor with a panel UI.
 
+## Enterprise Adoption Notes
+
+The token pricing model creates unpredictable cost exposure at enterprise scale. In a notable instance, Microsoft granted thousands of employees access to Claude Code in December 2025 as a pilot for its Experiences and Devices group (Windows, Microsoft 365, Outlook, Teams, Surface). By May 2026, the pilot had consumed Microsoft's entire projected 2026 AI spend, and the company announced it would wind down Claude Code licenses by June 30, 2026 — the end of Microsoft's fiscal year — in favor of GitHub Copilot CLI.
+
+The stated rationale was "strategic consolidation" and better fit with Microsoft's internal repositories and security requirements. The financial driver is widely understood to be fiscal-year-end cost containment. Anthropic models remain accessible to Microsoft developers through Copilot CLI, Microsoft 365 apps, and the existing partnership; the change is to the dedicated Claude Code license rather than to model access generally.
+
+The HN discussion around the announcement identified this as a broader enterprise risk pattern with agentic AI tools: unsupervised agentic workflows consume tokens at a qualitatively different rate than supervised human-in-the-loop use, and the cost curve is difficult for enterprises to predict or control without deliberate tooling for monitoring and governance. One developer in the thread reported spending approximately $40,000 on Claude tokens over three months, attributing the excess to the model spawning numerous subagents that got stuck. Another commenter noted that Claude's token usage per task is higher than comparable agents — a deliberate quality trade-off that enterprises may not want when operating at scale.
+
 ## See Also
 
 - [Claude Code Subagents](claude-code-subagents.md)

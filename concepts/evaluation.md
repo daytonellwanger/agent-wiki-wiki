@@ -39,6 +39,8 @@ Several benchmarks have emerged specifically for agentic tasks:
 
 Benchmark scores are informative but not sufficient — models can overfit to benchmark distributions, and benchmark tasks often don't represent your specific production use case.
 
+A recurring failure mode in ad-hoc LLM benchmarks is **single-task, single-attempt, subjective scoring**: evaluate several models on one hand-chosen problem, rate output quality visually, and publish a ranking. The OpenSCAD architectural modeling benchmark (ModelRift, May 2026) — which had models generate a Pantheon model from reference photos — is a concrete illustration: HN commenters noted that "one 3D model and one attempt is just not enough" and that a single real-world object with subjective visual scoring does not constitute a benchmark. The finding that Antigravity 2.0 scored highest on that single example is not a robust claim. The underlying observation that small, functional, mechanically verifiable tasks (e.g., generating a parametric bracket for a specific bolt pattern) work substantially better than open-ended aesthetic or architectural tasks is more durable — and consistent with the RLVR pattern: tasks with a clear verifiable outcome are where current coding agents perform best.
+
 ## Verifiable Rewards and Model Training
 
 Outcome-based evaluation is not only a measurement tool — it is increasingly a training signal. **Reinforcement Learning from Verifiable Rewards (RLVR)** trains models using outcomes that can be checked without a human judge: code that passes or fails tests, math problems with correct or incorrect answers, tool calls that return success or error. Because the reward is binary and unambiguous, RLVR scales without expensive human labeling.

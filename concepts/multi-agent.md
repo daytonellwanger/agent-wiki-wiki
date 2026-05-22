@@ -14,6 +14,8 @@ This is the most common pattern in production. [LangGraph](../tools/langgraph.md
 
 Multiple agents work independently on different parts of a task simultaneously, with their results merged afterward. Useful when sub-tasks are truly independent (e.g., processing many documents in parallel).
 
+A practical implementation pattern for parallel coding agents is git worktrees: each agent gets its own branch and working directory, preventing interference and allowing results to be reviewed independently before merging. Tools like [Superset](../tools/superset.md) operationalize this pattern by layering a management UI on top of CLI agents — monitoring status, surfacing diffs, and handling PRs across many concurrent worktrees.
+
 ### Debate / Verification
 
 One agent produces a result; another reviews or critiques it. This can catch errors the first agent wouldn't catch itself, at the cost of additional latency and tokens.
@@ -68,3 +70,4 @@ Avoid it when a single capable agent would do — the coordination overhead is r
 - [LangGraph](../tools/langgraph.md)
 - [OpenAI Agents SDK](../tools/openai-agents-sdk.md)
 - [AutoGen](../tools/autogen.md)
+- [Superset](../tools/superset.md) — desktop orchestration layer for parallel coding agents using git worktrees

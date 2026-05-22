@@ -1,5 +1,39 @@
 # Log
 
+## [2026-05-22] — Microsoft cancels Claude Code licenses over budget overrun
+
+**Source:** "Microsoft starts canceling Claude Code licenses" (https://news.ycombinator.com/item?id=48238896); article at theverge.com/tech/930447/microsoft-claude-code-discontinued-notepad (inaccessible — content reconstructed from The Decoder, Windows Central, and HN discussion). Score: 82, 41 comments.
+
+**Technical:** Pages updated: tools/claude-code.md (new "Enterprise Adoption Notes" section added).
+
+**Summary:** Microsoft granted thousands of employees access to Claude Code in December 2025 as a pilot for its Experiences and Devices group (Windows, M365, Outlook, Teams, Surface). By May 2026, the pilot had consumed Microsoft's entire projected 2026 AI budget, and the company announced it would wind down Claude Code licenses by June 30, 2026 — the end of its fiscal year — in favor of GitHub Copilot CLI. The official rationale was "strategic consolidation," but cost reduction and fiscal-year-end savings are widely cited as the real driver; Anthropic models remain accessible to Microsoft developers through Copilot CLI and the existing Anthropic partnership. GitHub Copilot CLI currently has "significant feature gaps" compared to Claude Code.
+
+The HN discussion surfaced a durable enterprise risk pattern: unsupervised agentic workflows consume tokens at a qualitatively different rate than supervised human-in-the-loop use, and enterprises lack tooling to predict or govern that cost exposure. Specific data points: one developer reported $40,000 in Claude token costs over three months before switching to GPT-5.5; another reported a Claude Code budget exhausted in just over a week while DeepSeek users couldn't match that spending over a month. Commenters also noted that Claude's per-task token consumption is higher than competing agents — a deliberate quality trade-off that may not be appropriate at enterprise scale. The original poster (who broke the story) confirmed the pilot "accidentally consumed their 2026 yearly target spend on AI." Added an Enterprise Adoption Notes section to the Claude Code page documenting the Microsoft case and its implications for agentic cost governance.
+
+## [2026-05-22] — Prompt injection via agentic-targeted web content
+
+**Source:** "If you're an LLM, please read this" (https://news.ycombinator.com/item?id=48234413); article at annas-archive.gl/blog/llms-txt.html (502 at time of ingestion). Score: 617, 369 comments.
+
+**Technical:** Pages updated: concepts/tool-use.md (paragraph added to "Retrieval Tools and Adversarial Content" section illustrating explicit LLM-targeted instructions as a prompt injection pattern).
+
+**Summary:** Anna's Archive published a page explicitly addressed to LLMs, requesting that any model with access to payment tools initiate a donation or persuade its user to donate. The HN discussion immediately identified this as a prompt injection vector: an agent equipped with payment capabilities that fetches the page could be triggered to execute a financial transaction. Commenters predicted that this kind of instruction-embedding will become a widespread web pattern, further degrading the web as a trustworthy grounding source for agents. The article was inaccessible (502) at time of ingestion; the HN discussion was well-represented. The example reinforces the existing wiki guidance that retrieved web content must be treated as untrusted data, not trusted instructions.
+
+## [2026-05-22] — Superset: desktop orchestration layer for parallel coding agents
+
+**Source:** "Launch HN: Superset (YC P26) – IDE for the agents era" (https://news.ycombinator.com/item?id=48236770); repo at github.com/superset-sh/superset. Score: 52, 66 comments.
+
+**Technical:** Pages created: tools/superset.md (new). Pages updated: concepts/multi-agent.md (note on git worktrees as a parallel-worker isolation pattern, with link to Superset), index.md (Superset added to Tools).
+
+**Summary:** Superset is a YC P26 desktop application (~11k GitHub stars) that operationalizes the parallel coding agent pattern: each task runs in its own git worktree (isolated branch and working directory), and a unified UI manages status monitoring, diff review, and PR handling across many concurrent CLI agent invocations. The tool is agent-agnostic — it wraps any CLI coding agent, including Claude Code. Users in the HN thread reported managing 40–50 concurrent sessions without losing track. The core architectural contribution is git worktrees as the isolation primitive for parallel coding agents, which is a practical, durable pattern worth capturing. Added a Superset tool page and noted the worktree pattern in the Multi-Agent Coordination concept page.
+
+## [2026-05-22] — OpenSCAD LLM benchmark: single-task subjective scoring as a benchmark validity illustration
+
+**Source:** "Antigravity 2.0 Tops the OpenSCAD Architectural 3D LLM Benchmark" (https://news.ycombinator.com/item?id=48234090); article at modelrift.com/blog/openscad-llm-benchmark/. Score: 295, 114 comments.
+
+**Technical:** Pages updated: concepts/evaluation.md (paragraph added to Benchmarks section on single-task benchmark validity concerns).
+
+**Summary:** ModelRift published a benchmark comparing several LLM coding tools (Antigravity 2.0/Gemini 3.5 Flash, Claude Sonnet, Claude Opus, Codex 5.5, Cursor Composer, and their own ModelRift/Flash 3.0) on a single task: generating a parametric OpenSCAD model of the Pantheon from two reference photos. Antigravity 2.0 scored highest on autonomous generation (4.5/5); ModelRift's own annotation-based human-in-the-loop workflow scored highest overall. The HN discussion was notably critical of the benchmark methodology: multiple commenters independently flagged that one object, one attempt, and subjective visual scoring does not constitute a benchmark. The post is a concrete illustration of a recurring failure mode in ad-hoc LLM benchmarks. The one durable observation is that small, functional, mechanically verifiable coding tasks (like generating a parametric grommet for a specific bolt pattern) work substantially better than open-ended aesthetic or architectural tasks — consistent with the RLVR/verifiable constraints material already in the wiki. Added a paragraph to the Evaluation page's Benchmarks section documenting this failure mode and the underlying task-verifiability observation.
+
 ## [2026-05-21] — Code execution sandboxing: containers vs. microVMs for coding agents
 
 **Source:** "We Reverse-Engineered Docker Sandbox's Undocumented MicroVM API" (https://news.ycombinator.com/item?id=48223693); article at rivet.dev/blog/2026-02-04-we-reverse-engineered-docker-sandbox-undocumented-microvm-api/. Score: 62, 5 comments.
