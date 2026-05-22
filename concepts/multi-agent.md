@@ -10,6 +10,8 @@ An orchestrator agent decomposes a task, delegates sub-tasks to specialized suba
 
 This is the most common pattern in production. [LangGraph](../tools/langgraph.md) and [OpenAI Agents SDK](../tools/openai-agents-sdk.md) both provide primitives for it. [Claude Code Subagents](../tools/claude-code-subagents.md) is a well-documented, production-grade implementation: the main session delegates to named child agents (Explore, Plan, General-purpose, or custom) each running in its own context window with scoped tool access.
 
+**Trigger tables** are a practical pattern for automatic specialist routing. Rather than requiring the developer or orchestrator to manually select which specialist handles each task, a trigger table maps file-modification patterns to agents: changes to network/sync files route to a `network-protocol-designer`; changes to coordinate or camera code route to a `coordinate-wizard`; architecture review requests route to a `systems-designer`. The table encodes institutional knowledge about domain boundaries — which parts of the codebase require which kind of expertise — making specialist selection automatic and consistent. Redundant encoding (developers consult the trigger table before making changes, not just after) further reinforces correct routing.
+
 ### Parallel Workers
 
 Multiple agents work independently on different parts of a task simultaneously, with their results merged afterward. Useful when sub-tasks are truly independent (e.g., processing many documents in parallel).

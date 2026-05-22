@@ -1,5 +1,21 @@
 # Log
 
+## [2026-05-22] — Codified context infrastructure: specialist agent knowledge embedding, staleness, and trigger tables
+
+**Source:** "Codified Context Infrastructure for AI Agents" (https://arxiv.org/html/2602.20478v1). Empirical study of a three-tier agent knowledge architecture on a 108K-line C# codebase, 283 sessions, 2,801 human prompts, 16,522 agent turns.
+
+**Technical:** Pages updated: concepts/progressive-disclosure.md (new "What Specialist Agents Should Contain" subsection; single-file manifest scaling note added to intro), concepts/memory.md (staleness bullet expanded with production evidence, context drift detector pattern, maintenance overhead), concepts/multi-agent.md (trigger tables pattern added to Orchestrator + Subagents section).
+
+**Summary:** The paper documents a production three-tier knowledge architecture and provides one of the more empirically grounded accounts of specialist agent design. Three findings worth capturing:
+
+(1) **Specialist agents should be mostly domain knowledge, not instructions.** Over half of each specialist spec's content was codebase facts, code patterns, formulas, and debugging tables — not behavioral instructions. The argument: complex domains require complete mental models. Partial pre-loaded knowledge causes subtle bugs that full pre-loading prevents (e.g., a networking agent that doesn't embed the full determinism theory risks desync in edge cases). Retrieval can supply individual facts; it cannot guarantee the synthesized cross-subsystem view. A practical heuristic: "If you explained it twice, write it down."
+
+(2) **Staleness is the primary failure mode.** When specs go out of date, agents generate code against stale information — deprecated paths, migrated fields — producing hard-to-detect bugs. The paper documents a *context drift detector* (flag commits without corresponding spec updates) as a mitigation, and quantifies the maintenance overhead at ~1–2 hours/week for a 100K-line codebase.
+
+(3) **Trigger tables encode institutional routing knowledge.** File-pattern routing tables (network/sync changes → `network-protocol-designer`; coordinate/camera changes → `coordinate-wizard`) automate specialist selection without requiring manual orchestrator decision-making. The table is a codification of institutional knowledge about domain boundaries.
+
+Secondary finding: pre-loaded specialist context shifts communication patterns — 80% of human prompts were ≤100 words, a workload only achievable when developers aren't spending prompts re-explaining the system. Also explicit: single-file manifests (CLAUDE.md, .cursorrules) don't scale beyond modest codebases.
+
 ## [2026-05-22] — Microsoft cancels Claude Code licenses over budget overrun
 
 **Source:** "Microsoft starts canceling Claude Code licenses" (https://news.ycombinator.com/item?id=48238896); article at theverge.com/tech/930447/microsoft-claude-code-discontinued-notepad (inaccessible — content reconstructed from The Decoder, Windows Central, and HN discussion). Score: 82, 41 comments.
