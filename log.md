@@ -1,5 +1,17 @@
 # Log
 
+## [2026-05-23] — Specs as the primary accountability artifact in LLM-generated code
+
+**Source:** "--dangerously-skip-reading-code" (https://news.ycombinator.com/item?id=48246232); article at olano.dev/blog/dangerously-skip/. Score: 43, 51 comments.
+
+**Technical:** Pages updated: concepts/verifiable-constraints.md (new "Specs as the Primary Accountability Artifact" section added; "Test correctness" open question sharpened to cover spec-correctness risk propagation).
+
+**Summary:** The article argues that when LLMs generate code faster than humans can read it, the traditional expectation that engineers own every line becomes impractical. The proposed response: shift accountability from code to specifications. The spec (a standardized Markdown document) becomes the unit of knowledge that humans read, version-control, and are responsible for. Tests verify that generated code conforms to the spec. Code is treated as compiled output rather than a readable artifact.
+
+This is a meaningful extension of the verifiable-constraints frame already in the wiki. The wiki covered tests-as-walls and TDD-as-wall-placement, but hadn't explicitly named the upstream implication: when code review is no longer the accountability gate, specs must be. The article also makes explicit that this is an organizational decision — it cannot be adopted unilaterally by a team — which connects to the "Input Quality Is a Prerequisite" material already in the Planning page.
+
+The HN discussion added a concrete workflow pattern (hombre_fatal): create plan files first, iterate on specs with agent assistance, then generate implementation — a practical form of spec-review-replaces-code-review. A notable challenge raised by wizzwizz4: determining whether code fully conforms to a natural-language spec is an unsolved problem touching on Rice's theorem, so tests provide partial conformance checking, not complete verification. Added a new section to the Verifiable Constraints page and sharpened the "test correctness" open question to note that in spec-driven workflows the risk propagates upstream through the entire spec-test-code chain.
+
 ## [2026-05-22] — Codified context infrastructure: specialist agent knowledge embedding, staleness, and trigger tables
 
 **Source:** "Codified Context Infrastructure for AI Agents" (https://arxiv.org/html/2602.20478v1). Empirical study of a three-tier agent knowledge architecture on a 108K-line C# codebase, 283 sessions, 2,801 human prompts, 16,522 agent turns.
