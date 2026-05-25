@@ -61,6 +61,16 @@ Several aspects of this result are notable from an agent evaluation perspective:
 
 The result is one of a cluster of AI mathematical achievements in early-mid 2026 (including earlier Erdős problem results and a Frontier Math open problem result), suggesting that open-problem-solving is becoming a meaningful benchmark category for frontier reasoning models — though commenters noted that Erdős problems are disproportionately represented because they are well-documented, crisply stated, and have not received decades of intensely specialized human attention.
 
+## Token Consumption as a Productivity Proxy
+
+As AI coding tools have been adopted at scale, some organizations have begun tracking token consumption as a proxy for developer productivity — an approach sometimes called "tokenmaxxing." The logic is intuitive: more tokens consumed means engineers are using AI more actively, which should correlate with more output.
+
+The data does not support this. Analysis of 22,000 developers across 4,000 teams by Faros AI found that higher token consumption correlated with surface throughput gains (task completion up 34%, code-specific tasks up 210%) while simultaneously producing degraded quality outcomes: bugs per developer up 54%, code churn up 861%, median code review time increased 5x, incidents tripled relative to pull requests, and 31% more PRs merged without review. More tokens shipped more code; it did not ship more working, maintainable software.
+
+This is the AI-era equivalent of measuring developer productivity by lines of code — a practice the industry abandoned decades ago precisely because it is gameable, disconnected from quality, and perverse when it becomes a target (Goodhart's Law). Companies including Meta and Uber built internal leaderboards tracking token consumption; Uber's COO acknowledged by May 2026 that "the link is not there yet" between token spending and useful consumer features. Uber's CTO separately disclosed that the company had exhausted its entire 2026 AI tool budget within four months.
+
+What to measure instead: throughput, efficiency, and quality as separate dimensions, with quality metrics (bug rate, review time, churn, incident rate) weighted alongside or above throughput metrics. Within-team segmentation is important — token consumption varies enormously by workflow type, and aggregate numbers obscure whether AI is helping or hurting for specific use cases.
+
 ## Practical Guidance
 
 - Define what "success" means before building. If you can't specify it, you can't evaluate it — and the agent can't reliably pursue it.
@@ -68,6 +78,7 @@ The result is one of a cluster of AI mathematical achievements in early-mid 2026
 - Build a small labeled eval set from real user tasks early. Don't wait until the product is deployed.
 - Use outcome-based evaluation as the primary signal; add trajectory evaluation where safety matters.
 - LLM-as-judge is a useful accelerant but needs periodic human calibration.
+- Do not use token consumption as a proxy for productivity. It measures activity, not output quality. Track bug rate, code churn, review time, and incident rate alongside throughput.
 
 ## See Also
 

@@ -1,5 +1,15 @@
 # Log
 
+## [2026-05-25] — Token consumption as a productivity proxy: the tokenmaxxing antipattern
+
+**Source:** "Uber's COO says it's getting harder to justify money spent on tokenmaxxing" (https://news.ycombinator.com/item?id=48268871); article at businessinsider.com (paywalled — content reconstructed from accessible sources and HN discussion). Score: 156, 205 comments.
+
+**Technical:** Pages updated: concepts/evaluation.md (new "Token Consumption as a Productivity Proxy" section added; one bullet added to Practical Guidance).
+
+**Summary:** The post prompted by Uber's COO questioning the ROI of AI token spending is primarily business news — but it sits on top of a durable antipattern worth documenting. "Tokenmaxxing" names the practice of using token consumption as a proxy for developer productivity, which several large companies (including Uber and Meta) implemented as internal leaderboards and performance signals. The data contradicts the premise: a Faros AI study of 22,000 developers across 4,000 teams found that higher token consumption correlated with surface throughput gains (task completion up 34%) while simultaneously producing worse quality outcomes — bugs up 54%, code churn up 861%, review time up 5x, incidents tripled relative to PRs, 31% more unreviewed merges. Uber exhausted its entire 2026 AI tool budget in four months, and the COO acknowledged the link between spend and useful consumer features "is not there yet."
+
+This is the AI-era rerun of measuring developer productivity by lines of code — a practice the industry retired for the same reasons. The HN discussion consistently named Goodhart's Law: when consumption becomes a target, it stops tracking what it was supposed to measure. Added a new section to the Evaluation page documenting the antipattern, the supporting data, and what to measure instead (throughput, efficiency, and quality as separate dimensions, with quality metrics weighted alongside throughput). Also added a corresponding bullet to Practical Guidance.
+
 ## [2026-05-23] — Specs as the primary accountability artifact in LLM-generated code
 
 **Source:** "--dangerously-skip-reading-code" (https://news.ycombinator.com/item?id=48246232); article at olano.dev/blog/dangerously-skip/. Score: 43, 51 comments.
