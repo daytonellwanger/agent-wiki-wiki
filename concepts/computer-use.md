@@ -25,6 +25,19 @@ Performance is improving rapidly but still lags human accuracy on complex tasks,
 - **Fragility**: small UI changes (button moves, page layout changes) can break agents that rely on visual landmarks.
 - **Security**: an agent with mouse and keyboard access can be manipulated by malicious content on-screen (prompt injection via the UI). Sandboxing and careful permission scoping are essential.
 
+## Agent-Authored Scripts: A Hybrid Approach for Production RPA
+
+Pure computer use — running a model inference per action at execution time — is expensive and fragile at production scale. An alternative pattern: use an agent with computer use capability to *author* a deterministic Python script that encodes the automation, then execute that script directly on subsequent runs without further model inference.
+
+This separates two concerns:
+
+1. **Authoring phase**: the agent observes the GUI, reasons about the workflow, and writes a script capturing the exact sequence of actions.
+2. **Execution phase**: the script runs deterministically, with no model involved. Model inference only re-enters when the script fails (e.g., a UI change breaks an assumption), triggering a self-healing loop that patches or rewrites the affected portion.
+
+The practical benefit is latency, cost, and reliability at scale. Script execution is faster and cheaper than model-per-action inference, and errors are localized rather than cascading. Proponents claim this approach reaches 93–96% click accuracy in production versus 80–85% for pure computer use models.
+
+The tradeoff: script maintenance. When UIs change substantially, the script may require significant revision. The self-healing loop partially addresses this, but complex layout changes may still require human intervention or full re-authoring. This pattern is most appropriate for workflows that are high-frequency, relatively stable, and run against the same application version repeatedly — such as EHR data entry, ERP report generation, or similar enterprise RPA targets.
+
 ## Use Cases
 
 - Automating web research and form-filling

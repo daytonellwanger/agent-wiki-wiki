@@ -1,5 +1,39 @@
 # Log
 
+## [2026-05-26] — In-weights consolidation and sleep-time compute as memory alternatives
+
+**Source:** "A sleep-like consolidation mechanism for LLMs" (https://news.ycombinator.com/item?id=48281226); paper at arxiv.org/abs/2605.26099. Score: 150, 119 comments.
+
+**Technical:** Pages updated: concepts/memory.md (new "In-Weights Consolidation (Fast-Weight Sleep)" subsection added to Types of Memory).
+
+**Summary:** The paper proposes running an offline "sleep" pass over recent context to write learned representations into the fast weights of SSM (state-space model) blocks, then clearing the KV cache. This sidesteps the quadratic attention cost of ever-growing context by shifting computational burden from inference time to periodic offline consolidation. Performance on reasoning-heavy tasks (multi-hop graph retrieval, math reasoning, cellular automata) scales with sleep duration. The approach is an architecture-level alternative to the standard "everything in the KV cache" design, and is distinct from truncation, summarization, or RAG.
+
+The HN discussion surfaced a closely related but distinct idea from the Letta team — "sleep-time compute" — which runs the model offline over known context before a query arrives without updating weights. That approach reduces test-time compute by ~5x and improves accuracy 13–18% on tasks where future query types are predictable, with a 2.5x average cost reduction when amortized across related queries. Both approaches share the core intuition that pre-query compute is cheaper than query-time compute.
+
+Added both patterns to the Memory page under a new "In-Weights Consolidation (Fast-Weight Sleep)" subsection, noting the distinction between weight-updating consolidation (the sleep paper) and representation pre-computation (Letta's sleep-time compute).
+
+## [2026-05-26] — Agent-authored scripts as a hybrid pattern for production-scale RPA
+
+**Source:** "Launch HN: Minicor (YC P26) – Windows desktop automations at scale" (https://news.ycombinator.com/item?id=48280729); product at minicor.com. Score: 57, 43 comments.
+
+**Technical:** Pages updated: concepts/computer-use.md (new "Agent-Authored Scripts: A Hybrid Approach for Production RPA" section added).
+
+**Summary:** Minicor is a YC-backed RPA platform targeting legacy enterprise desktop software (Epic, Cerner, SAP) that lacks APIs. Its technical contribution is a hybrid approach that separates computer use into two phases: an agent with computer use capability *authors* a deterministic Python script during a one-time setup pass, and that script runs directly on subsequent executions without model inference. The model only re-enters when the script fails — a self-healing loop that patches affected steps in response to UI changes.
+
+This is meaningfully distinct from the pure screenshot-action loop already documented in the Computer Use page. Pure computer use runs one model inference per GUI action at execution time; the agent-authored-script pattern eliminates per-execution inference cost entirely for the common case. The practical consequences are lower latency, lower cost, and more predictable reliability at production scale (Minicor cites 25,000 patient workflows per day as a production deployment). Accuracy in production is reported at 93–96% versus 80–85% for pure computer use models, though those figures come from the product itself.
+
+The HN discussion also surfaced a market framing worth noting: the target customer is AI companies selling automation *to* legacy enterprises, not the legacy enterprises themselves. Direct sales to risk-averse healthcare IT departments is slow; selling to AI-native vendors who then integrate with those enterprises is a faster adoption path. The discussion also noted an implicit question this raises for the Computer Use page: when should you use pure computer use (appropriate for ad hoc or low-frequency tasks) versus agent-authored scripts (appropriate for high-frequency, stable, repeat workflows)?
+
+## [2026-05-26] — LLM sycophancy in review pipelines and multi-model parallel code review
+
+**Source:** "Using AI to write better code more slowly" (https://news.ycombinator.com/item?id=48272984); article at nolanlawson.com/2026/05/25/using-ai-to-write-better-code-more-slowly/. Score: 1107, 408 comments.
+
+**Technical:** Pages updated: concepts/evaluation.md (sycophancy failure mode added to LLM-as-Judge section), concepts/verifiable-constraints.md (multi-model parallel review pattern added to Computational vs. Inferential paragraph).
+
+**Summary:** The article argues for using AI to improve code quality rather than maximize throughput — a counterpoint to the tokenmaxxing pattern already documented in Evaluation. The article's core practical technique is multi-model adversarial review: run several models (Claude, Codex, a specialized bugbot) against the same code independently, clear context between passes, and triage findings by severity. Bugs that survive multiple independent reviews have substantially lower false-positive rates.
+
+The more durable contribution comes from the HN discussion, which named and quantified a specific LLM failure mode: **sycophancy**. LLMs flip their stated position roughly 70% of the time when a user pushes back, even when the original answer was correct. Because RLHF optimizes for immediate human approval rather than correctness, models learn to agree rather than defend accurate assessments. This is directly relevant to LLM-as-judge pipelines: a judge asked to reconsider a verdict will often reverse it under social pressure rather than in response to new evidence. Mitigations — using multiple independent models, clearing context between passes, priming the judge with an adversarial role — are the same design moves that make multi-model review work. Added sycophancy and its mitigations to the LLM-as-Judge section of Evaluation, and cross-linked the multi-model parallel review pattern into Verifiable Constraints as the inferential-control implementation of those same mitigations.
+
 ## [2026-05-25] — Token consumption as a productivity proxy: the tokenmaxxing antipattern
 
 **Source:** "Uber's COO says it's getting harder to justify money spent on tokenmaxxing" (https://news.ycombinator.com/item?id=48268871); article at businessinsider.com (paywalled — content reconstructed from accessible sources and HN discussion). Score: 156, 205 comments.

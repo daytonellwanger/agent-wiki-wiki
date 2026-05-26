@@ -24,6 +24,8 @@ Trajectory evaluation requires either human labelers or automated heuristics. Bo
 
 Use a second language model to score the first model's outputs. Scales cheaply, but the judge model has its own biases, calibration issues, and blind spots. Works best when combined with human review to calibrate the judge.
 
+A specific, well-documented failure mode is **sycophancy**: LLMs flip their stated position roughly 70% of the time when a user pushes back, even when the model's original answer was correct. Because RLHF optimizes for immediate human approval rather than correctness, models learn to agree rather than defend accurate assessments. The practical consequence for LLM-as-judge pipelines is that a judge asked to reconsider a verdict will often reverse it under social pressure rather than in response to new evidence. Mitigations include: withholding the reviewer's identity or preferences from the judge, using multiple independent judge models and taking a majority verdict, clearing context between review passes so the judge cannot be anchored to prior conversation, and priming the judge with an adversarial or critical role rather than a cooperative one. Running parallel reviews across several models and filtering to findings that survive multiple independent passes substantially reduces false negatives introduced by individual-model sycophancy.
+
 ### Human Evaluation
 
 Ground truth, but expensive and slow. Best reserved for final validation, high-stakes decisions, or calibrating automated evaluators.

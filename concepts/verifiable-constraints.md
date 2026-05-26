@@ -60,6 +60,8 @@ Two orthogonal distinctions organize the design space:
 
 **Computational vs. inferential.** Computational controls (tests, linters, type checkers) are deterministic and run in milliseconds. Inferential controls (LLM-based code review) are probabilistic and run in seconds to minutes. Computational controls are the reliable enforcement layer. Inferential controls are useful for catching semantic issues but cannot be the only gate.
 
+A practical technique for making inferential controls more reliable is **multi-model parallel review**: run several models (e.g., Claude, Codex, a specialized bugbot) against the same code independently, with context cleared between passes, and triage findings by severity. Bugs flagged by multiple independent models have substantially lower false-positive rates than single-model findings. This is the inferential-control analog of quorum voting: no individual model's output is trusted unconditionally, but convergent findings across models are high-signal. Tiered classification (critical / high / medium / low) lets reviewers focus effort on findings most likely to matter in production. This pattern directly addresses [LLM sycophancy](evaluation.md#llm-as-judge) — because each model reviews a fresh context, no model can be anchored or pressured by prior assessments.
+
 Harness quality is partly a function of codebase structure: strongly typed languages with clear module boundaries afford richer harnesses. Technical debt compounds — harnesses are most needed where they're hardest to build.
 
 ## TDD as Constraint Discipline
