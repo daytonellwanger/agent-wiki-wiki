@@ -1,5 +1,11 @@
 # Log
 
+## [2026-05-27] — Why keep CLAUDE.md short if project context helps Claude?
+
+**Technical:** New question page: questions/why-keep-claude-md-short.md. Updated index.md.
+
+**Summary:** Added a question examining the apparent tension between the "every line should prevent a mistake" advice for CLAUDE.md and the intuition that giving Claude more project context would improve its effectiveness. The answer clarifies that CLAUDE.md and project context target different layers: CLAUDE.md's job is behavioral correction for defaults that code can't communicate, while architecture and goals reach Claude through the codebase itself, on-demand file references, and specialist subagent specifications. The short-CLAUDE.md advice is specifically about the unconditionally-loaded startup file; specialist agents can and do carry hundreds of lines of domain knowledge pre-loaded — the difference is they only activate when invoked.
+
 ## [2026-05-27] — Fuzzer-reproducibility as a mechanical verification gate in security agent pipelines
 
 **Source:** "Multi-Agent LLM System for Automated Vulnerability Discovery and Reproduction" (https://news.ycombinator.com/item?id=48297723); paper at arxiv.org/abs/2605.21779. Score: 38, 3 comments (off-topic).
