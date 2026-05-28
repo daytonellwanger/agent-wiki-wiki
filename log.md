@@ -1,5 +1,31 @@
 # Log
 
+## [2026-05-27] — Fuzzer-reproducibility as a mechanical verification gate in security agent pipelines
+
+**Source:** "Multi-Agent LLM System for Automated Vulnerability Discovery and Reproduction" (https://news.ycombinator.com/item?id=48297723); paper at arxiv.org/abs/2605.21779. Score: 38, 3 comments (off-topic).
+
+**Technical:** Pages updated: concepts/multi-agent.md (FuzzingBrain V2 added as a second concrete example in "Task Decomposition: Narrow and Parallel vs. Sequential" section, with a new closing sentence generalizing the verification gate lesson).
+
+**Summary:** FuzzingBrain V2 is an academic multi-agent vulnerability discovery system built on Google's OSS-Fuzz that adds a complementary data point to the Glasswing example already in the wiki. The paper's most durable contribution is its choice of verification gate: rather than LLM-based adversarial review (Glasswing's Validate stage), FuzzingBrain requires every reported vulnerability to be fuzzer-reproducible before it is promoted. This is the Verifiable Constraints pattern applied at the output boundary of a security agent pipeline — a mechanical, executable check rather than a judgment call. In real-world deployment the system found 29 confirmed zero-day CVEs across 12 open-source projects. The two examples together illustrate a design fork for verification in narrow-and-parallel security pipelines: LLM-as-adversarial-reviewer (more general, but subject to sycophancy) versus automated fuzzer gate (more mechanical and tamper-resistant, but requires a runnable artifact). The HN discussion was sparse and off-topic (three comments about offensive AI countermeasures), so the article itself carries all the weight.
+
+## [2026-05-27] — Claude Code configuration patterns: CLAUDE.local.md, skill safety flags, and MCP selection
+
+**Source:** "Claude Code as a Daily Driver: Claude.md, Skills, Subagents, Plugins, and MCPs" (https://news.ycombinator.com/item?id=48289950); article at arps18.github.io/posts/claude-code-mastery/. Score: 345, 219 comments.
+
+**Technical:** Pages updated: tools/claude-code.md (CLAUDE.md best practices expanded; CLAUDE.local.md added as new bullet under Differentiating Features), concepts/progressive-disclosure.md (disable-model-invocation flag added to Agent Skills section), tools/mcp.md (new "Practical Installation Guidance" section with high-value MCPs and selective installation guidance), concepts/verifiable-constraints.md (pre-commit hooks corollary added to CI Gates section), tools/claude-code-subagents.md (new "Code Review Subagents" subsection with effort levels and writer/reviewer pattern).
+
+**Summary:** The article is a practitioner writeup on Claude Code configuration, and the HN discussion added several substantive points from domain experts. Four additions are worth capturing.
+
+First, **CLAUDE.local.md** — a machine-local, gitignored companion to CLAUDE.md. The pattern is to dump recurring PR feedback into it immediately after reviews, then prune once the habits become automatic. This is a personal-patterns layer that accumulates without polluting the shared project config.
+
+Second, **`disable-model-invocation: true`** in Skill frontmatter. Without this flag, Claude can decide a skill is relevant and invoke it automatically. For skills with side effects (deploy, ship, push), that's dangerous — you want explicit human invocation, not model judgment. The flag converts a skill from auto-invocable to explicit-only.
+
+Third, **selective MCP installation**. Bloated tool lists degrade decision quality; the guidance is to install only what you actually need. A practical high-value set: GitHub, Context7 (live library docs), Sentry (real error context), Playwright, PostgreSQL/Supabase.
+
+Fourth, **code review effort levels** from Boris Cherny (Anthropic team member active in the HN discussion). The `/code-review` skill supports effort levels (`low` through `max`, plus `ultra`) with `ultra` designed to catch >99% of bugs at $3–20 per review. A practitioner in the thread confirmed `/code-review xhigh --fix` covers the large majority of what automated review can handle.
+
+A fifth notable data point from the HN discussion (mil22): across 627 logged Claude Code sessions, language server (LSP) tools were invoked exactly once despite being strongly recommended. Ripgrep and explicit tools like `cargo clippy` and `dart analyze` performed equally well. This suggests LSP integration advice may be overstated relative to simpler alternatives — not added to the wiki as a single-source data point, but worth noting.
+
 ## [2026-05-26] — In-weights consolidation and sleep-time compute as memory alternatives
 
 **Source:** "A sleep-like consolidation mechanism for LLMs" (https://news.ycombinator.com/item?id=48281226); paper at arxiv.org/abs/2605.26099. Score: 150, 119 comments.

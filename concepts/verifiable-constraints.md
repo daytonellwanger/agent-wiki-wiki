@@ -28,6 +28,8 @@ Type systems apply statically, before any code runs, and catch a broad class of 
 
 CI gates determine which constraints are hard walls (block the PR) versus soft suggestions (emit a warning). The choice matters: a warning the agent never sees is not a constraint. A gate that terminates the task after two CI cycles (as Stripe does) is. The distinction between "we have tests" and "tests must pass before merge" is the distinction between a suggestion and a wall.
 
+A practical corollary for agentic workflows: move deterministic checks into pre-commit scripts and git hooks rather than relying on CLAUDE.md directives. Agents frequently skip listed steps in instruction files; a pre-commit hook that blocks the commit is enforced mechanically. The general principle: any check that can be made deterministic should be wired into the toolchain, not the prompt.
+
 ### Property-Based Tests
 
 Property-based tests validate invariants across large or random input spaces rather than a fixed set of examples. Where unit tests say "given this input, expect this output," property-based tests say "for any input in this space, this invariant must hold." This provides stronger coverage guarantees and catches edge cases that example-based tests don't enumerate.

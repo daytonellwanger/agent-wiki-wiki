@@ -141,6 +141,14 @@ Stick with the main conversation when:
 - Multiple phases share significant context (planning → implementation → testing).
 - Latency matters — subagents start fresh and may need time to gather their own context.
 
+### Code Review Subagents
+
+Code review is one of the most effective uses of the subagent pattern. A well-designed code review subagent uses read-only tools to prevent reviewer bias, reviews in a fresh context with no implementation history, and includes explicit "Do NOT flag" sections to reduce noise. Group findings by severity.
+
+Claude Code ships a `/code-review` skill that the Anthropic team is treating as the primary built-in review mechanism. According to Boris Cherny (Anthropic), it supports effort levels — `low`, `medium`, `high`, `xhigh`, `max`, and an `ultra` mode — where higher effort levels catch more issues at higher cost. The `ultra` mode is designed to catch >99% of bugs at approximately $3–20 per review. A common effective pattern: `/code-review xhigh --fix` covers the large majority of what automated review can address.
+
+The writer/reviewer pattern (one session implements, a second fresh session reviews) is the strongest form of this: the reviewer subagent has no knowledge of the implementation decisions, so its review is structurally independent rather than biased by having written the code. See [Verifiable Constraints](../concepts/verifiable-constraints.md) for the connection to multi-model parallel review.
+
 ## SDK Usage
 
 In the Claude Agent SDK (Python/TypeScript), subagents are defined programmatically using the `agents` parameter in `query()` options. The `Agent` tool must be included in `allowedTools` for Claude to invoke them. Programmatically defined agents take precedence over filesystem-based ones with the same name.

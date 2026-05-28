@@ -26,6 +26,18 @@ As of 2025, MCP has seen significant adoption. Claude Desktop and Claude Code su
 
 In May 2026, Anthropic acquired Stainless — the company that had been building the official Anthropic SDKs and MCP server tooling used by hundreds of companies. The acquisition signals that Anthropic views SDK and MCP server quality as strategic infrastructure, not a commodity concern. Katelyn Lesse, Anthropic's Head of Platform Engineering, framed the rationale: "Agents are only as useful as what they can connect to."
 
+## Practical Installation Guidance
+
+Install MCPs selectively. A bloated tool list degrades decision quality — the more tools available, the harder it is for the model to select the right one for a given context. A practical set of high-value MCPs for coding workflows:
+
+- **GitHub**: PRs, issues, code search
+- **Context7**: live library documentation (avoids hallucinated API details from training data)
+- **Sentry**: real error context with stack traces and surrounding events
+- **Playwright**: browser automation and testing
+- **PostgreSQL / Supabase**: direct database queries
+
+Team-shared MCPs go in `.mcp.json` (checked into version control); personal ones in `~/.claude.json`.
+
 ## Tradeoffs
 
 **Pros**: interoperability, ecosystem leverage, standardized discovery.
