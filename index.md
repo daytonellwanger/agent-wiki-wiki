@@ -12,6 +12,7 @@
 - [Computer Use](concepts/computer-use.md) — Agents that interact with GUIs and desktop environments
 - [Evaluation](concepts/evaluation.md) — Measuring agent performance: trajectories, outcomes, and benchmarks
 - [Verifiable Constraints](concepts/verifiable-constraints.md) — Using mechanically checkable checks (tests, linters, type checkers, CI gates) to reliably steer coding agents
+- [Durable Execution](concepts/durable-execution.md) — Checkpointing and replay patterns for agent workflows that must survive process crashes
 
 ## Tools
 

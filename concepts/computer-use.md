@@ -12,11 +12,11 @@ The agent receives a screenshot (or an accessibility tree representation) of the
 
 Accessibility-tree representations (which describe UI elements as structured text) are often more token-efficient than screenshots but not always available.
 
-## Current State (2025)
+## Current State (2026)
 
 Anthropic released a computer use capability for Claude in late 2024, enabling agents to operate desktop environments via screenshot + action. OpenAI has also invested in similar browser-automation capabilities via the Operator product.
 
-Performance is improving rapidly but still lags human accuracy on complex tasks, especially those requiring precise spatial reasoning or navigating visually dense interfaces.
+Performance is improving rapidly. As of May 2026, Claude Opus 4.8 scores 84% on Online-Mind2Web, a web browser task benchmark. Performance still lags human accuracy on complex tasks, especially those requiring precise spatial reasoning or navigating visually dense interfaces.
 
 ## Key Challenges
 

@@ -34,6 +34,34 @@ Agents can pause the loop to request human input. This is important for:
 
 The decision of when to interrupt is itself a planning problem. Interrupting too often defeats the purpose of automation; never interrupting creates risk. See [Planning](planning.md).
 
+### Permission Fatigue and Its Consequences
+
+Per-action permission prompts — where the agent asks "approve this command?" before every tool call — are the dominant human-in-the-loop implementation for coding agents (Claude Code, OpenCode, Codex). But practitioners have found they fail in characteristic ways.
+
+**The fatigue mechanism.** When the vast majority of commands are benign, the threshold for approval becomes reflexive. Users approve without reading. Anthropic's own telemetry showed users approved roughly 93% of permission prompts in practice. A concurrent phishing campaign study found credential exfiltration succeeded in 24 out of 25 attempts — suggesting approval fatigue is near-total in adversarial conditions. The real danger is not any individual prompt but the pattern: hundreds of innocent commands train the user to approve, then a dangerous command arrives in the same flow.
+
+**Context mismatch.** Security classifications in permission prompts frequently don't match practitioners' actual threat models. Common disagreements include: reading dotfiles or shell configs (flagged as high-risk by some tools; publicly posted by many developers), running `git reset --soft HEAD~1` (local and reversible, yet triggers warnings), and listing directories. Mismatches in either direction erode trust — users who encounter overblocked benign commands stop taking warnings seriously.
+
+**Game-theoretic degeneration.** Per-action gates create a binary choice with no middle ground. In a 2026 Show HN post ("Continue? Y/N") simulating the experience, players who approved everything got poor security scores; players who denied everything got "security-conscious engineer" badges despite blocking valid work. The premise of the game — that users can correctly triage individual commands under time pressure — was itself contested by commenters who noted the game's abstract command stream bears little resemblance to real workflows, where dangerous commands arrive embedded in long sequences of routine edits.
+
+**False security theater.** Perhaps more importantly, per-action gates do not actually prevent damage from a determined or compromised agent. An agent with write access can edit `package.json` to change what `npm run build` does before the user approves the build command. The gate stops the action the user sees; it does not stop preparation for later actions the user approves without noticing.
+
+### What Practitioners Actually Do
+
+The community has converged on several alternatives, each with tradeoffs:
+
+**`--dangerously-skip-permissions` in a sandboxed environment.** The most common real-world pattern: disable per-action prompts entirely, but run the agent inside a container or VPS with no access to production credentials, auto-backups enabled, and network filtered. Risk shifts from per-action review to infrastructure resilience. The tradeoff: requires proper sandbox setup; gives no signal when an individual unusual action occurs.
+
+**Auto-review mode.** Claude Code's "Auto" mode and Codex's "Auto-review" pass each command through a fast server-side classifier before execution — a model reviews the model's action before it runs. Anthropic's telemetry for Auto mode reported a 17% false-negative rate (dangerous commands approved automatically), which is better than human approval under fatigue but not a strong guarantee.
+
+**Task-level authorization.** Rather than approving individual commands, users approve a high-level goal ("refactor this module") and the agent determines whether specific tool calls fall within that scope. A lightweight agent layer flags actions that appear outside the authorized scope for escalation. This reduces the approval surface from dozens of individual decisions to one, but requires reliable scope detection — still an open engineering problem.
+
+**Hooks and allowlists.** Pre-tool-use hooks (Claude Code supports these) let operators block dangerous patterns with a deterministic blocklist — `rm -rf`, `curl | bash`, writes to specific paths — rather than prompting for human approval. These miss novel dangerous patterns and require maintenance, but are not subject to fatigue.
+
+**Reversibility as the primary criterion.** A practical heuristic several practitioners use: approve anything reversible; interrupt or block irreversible actions. This sidesteps the classification problem by focusing on consequences rather than command text. Its weakness: reversibility is not always clear from command text alone (`git reset --soft HEAD~1` is reversible locally; it is not if the commit was already pushed to a protected branch).
+
+The deepest critique is that per-action permission prompts conflate two distinct functions: informing the user what the agent is doing (valuable) and blocking dangerous actions (largely ineffective at scale). Tools that expose agent actions as a real-time log without requiring approval for each one — letting users interrupt only when something looks wrong — may serve both functions better than traditional approve/deny dialogs.
+
 ## Loop Depth
 
 Agents can be nested: a subagent runs its own agentic loop inside a step of the parent agent's loop. This is how [multi-agent systems](multi-agent.md) work. Depth increases capability but also complexity and debugging difficulty.

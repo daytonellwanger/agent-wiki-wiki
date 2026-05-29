@@ -40,5 +40,6 @@ LangGraph is a separate library from LangChain, though it builds on LangChain's 
 - [Multi-Agent Coordination](../concepts/multi-agent.md)
 - [Planning](../concepts/planning.md)
 - [Tool Use](../concepts/tool-use.md)
+- [Durable Execution](../concepts/durable-execution.md) — broader context on checkpointing and workflow durability patterns
 - [LangChain](langchain.md)
 - [OpenAI Agents SDK](openai-agents-sdk.md)

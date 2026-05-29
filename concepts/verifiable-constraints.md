@@ -20,6 +20,8 @@ Linters encode architectural intent as executable rules: naming conventions, mod
 
 The key insight: linters can encode "how we build here" in a way that survives across sessions. Instructions drift. Rules don't. The lint error message itself becomes a corrective prompt — "use `logger.info({event: 'name'...})`" enables self-correction; "violation detected" does not. The error message must be actionable, not just indicative.
 
+A recurring antipattern in LLM-generated codebases without architectural linting is **pattern inconsistency**: each new feature is implemented in a slightly different way rather than following the established conventions of the codebase. The agent encounters each feature in isolation, samples from its training distribution, and produces superficially correct but stylistically incoherent code — different error handling idioms, different data access patterns, different naming conventions across files added in different sessions. The resulting codebase is harder to review, refactor, and extend. Linters that encode the project's conventions (naming, module boundaries, error handling shape) catch this drift and force convergence, turning "how we build here" from a suggestion into a mechanical constraint.
+
 ### Type Checkers
 
 Type systems apply statically, before any code runs, and catch a broad class of errors that tests may miss. A well-typed codebase constrains the solution space before the agent begins — many wrong implementations are simply unrepresentable. Strong type systems with explicit module signatures and interface contracts are among the most powerful passive constraints available.

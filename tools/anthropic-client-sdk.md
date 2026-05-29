@@ -38,6 +38,7 @@ For an agentic loop, you implement the tool-call cycle yourself: send a request,
 - **Tool use**: pass tool definitions and handle `tool_use` content blocks in the response loop.
 - **Extended thinking**: enable `thinking` blocks for complex reasoning tasks.
 - **Files API**: upload files (PDFs, images) for reuse across requests without re-uploading.
+- **Mid-task system updates** (added with Opus 4.8): the Messages API now accepts `system`-role entries within the `messages` array (not just as the top-level `system` parameter). This lets an agent update Claude's instructions mid-task — adjusting permissions, token budgets, or environment context — without breaking the prompt cache. Previously, changing the system prompt required a new request with a fresh cache.
 
 ## When to Use It
 
