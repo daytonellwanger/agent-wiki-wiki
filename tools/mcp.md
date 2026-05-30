@@ -40,10 +40,25 @@ Team-shared MCPs go in `.mcp.json` (checked into version control); personal ones
 
 ## Tradeoffs
 
-**Pros**: interoperability, ecosystem leverage, standardized discovery.
-**Cons**: extra latency from the client-server hop (for remote servers), schema translation overhead, still maturing.
+**Pros**: interoperability, ecosystem leverage, standardized discovery. Particularly useful for web-only services with no CLI, for non-technical users, for real-time bidirectional communication, and for production databases where the protocol's safety guardrails justify the overhead.
 
-For tightly integrated tools used in a single application, direct function calling may be simpler. MCP shines when tools need to be reused across multiple agents or hosts.
+**Cons**: context cost, latency, and operational complexity.
+
+### Context Cost
+
+MCP tool definitions consume substantial context before any reasoning begins. A concrete measurement from a production stack with four connected MCP servers: approximately 21,000 tokens consumed — roughly 10.5% of Claude's 200K context window — just from tool schemas. The Linear MCP server alone loaded 42 tool definitions consuming ~12,800 tokens, despite typical use involving only a fraction of those tools.
+
+The comparison against alternatives is stark: a Linear issue lookup via CLI required ~200 tokens versus ~13,000 tokens using MCP — a roughly 65x difference for the same operation.
+
+The primary mitigation is **deferred (lazy) tool loading**, added to the MCP spec in late 2025: tool schemas are fetched from the server only when a tool is actually invoked, rather than loaded upfront. See [Progressive Disclosure](../concepts/progressive-disclosure.md) for the broader pattern. Selectively installing only the MCPs you actively use (see Practical Installation Guidance above) is the simpler first step.
+
+### Latency
+
+MCP adds measurable round-trip overhead: approximately 3x slower per call than direct API access, and approximately 9.4x slower on initialization. For interactive workflows this matters; for long-running agentic tasks where the bottleneck is model inference, it is often negligible.
+
+### When to Prefer Alternatives
+
+For tools that already have a good CLI or direct API, and where context budget is a concern, CLI invocation or direct API calls are leaner. LLMs tend to have strong priors on standard CLI tools and APIs from training data, reducing the need for schema documentation. For tightly integrated tools used in a single application, direct function calling may be simpler. MCP shines when tools need to be reused across multiple agents or hosts, or when the tool provider has no pre-existing CLI or API surface.
 
 ## See Also
 

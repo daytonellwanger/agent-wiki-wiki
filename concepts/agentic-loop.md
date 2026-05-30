@@ -96,6 +96,16 @@ A 2026 preprint from the Max Planck Institute for Intelligent Systems ("Multi-St
 
 This is an early-stage preprint with limited community validation. The idea warrants attention because it addresses a structural bottleneck in every current agent framework, but the practical impact on agent harnesses (which are not yet instruction-tuned for multi-stream formats) remains to be seen.
 
+## Inference Speed and Agentic Throughput
+
+Because every step in the agentic loop is a model forward pass, inference latency directly bounds how quickly an agent can iterate. This matters more for agents than for single-turn chatbots: a multi-step task requiring 20 sequential inference calls compounds latency at every step. Applications like real-time video generation, interactive worldbuilding, and rapid code iteration have been cited as latency-sensitive use cases where throughput becomes a first-class design constraint.
+
+For single-request (batch size 1) inference, the primary bottleneck is **memory bandwidth**, not compute. Generating each token requires loading the full model weights through GPU memory; at batch size 1, this memory transfer dominates and the GPU's raw FLOP capacity is largely idle. This means token throughput scales with memory bandwidth, not with increases in FLOP count — a consequence of how autoregressive generation works.
+
+Software-level techniques that address this bottleneck include persistent GPU kernels that eliminate kernel-launch overhead, custom inter-GPU communication collectives with lower latency than vendor libraries, and parallelism strategies that overlap communication with computation (Delayed Tensor Parallelism). As of mid-2026, specialized inference engines targeting memory-bandwidth utilization rather than raw throughput can achieve 2,000–3,000+ tokens/second on a single request using high-end datacenter hardware (e.g., 8× AMD MI300X or 8× NVIDIA H200), compared to ~70 tokens/second from typical deployed APIs on comparable workloads. Importantly, these gains require no quantization, speculative decoding, or model modifications — the bottleneck is software stack efficiency, not model architecture.
+
+The practical implication for agent builders: inference speed per step is not a fixed constant but a variable that depends heavily on provider, hardware, and inference stack. For latency-sensitive agentic workflows, throughput headroom can be as important as model capability.
+
 ## Key Invariants
 
 - History is cumulative: the model sees everything that happened in the current session (up to context limits). This is both a strength (full context for reasoning) and a weakness (context window pressure, information overload).

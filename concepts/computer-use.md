@@ -38,6 +38,27 @@ The practical benefit is latency, cost, and reliability at scale. Script executi
 
 The tradeoff: script maintenance. When UIs change substantially, the script may require significant revision. The self-healing loop partially addresses this, but complex layout changes may still require human intervention or full re-authoring. This pattern is most appropriate for workflows that are high-frequency, relatively stable, and run against the same application version repeatedly — such as EHR data entry, ERP report generation, or similar enterprise RPA targets.
 
+## CAPTCHAs and Agent Detection
+
+CAPTCHAs are a significant practical obstacle for computer-use agents. The conventional wisdom — that AI can now match human CAPTCHA performance, making CAPTCHAs obsolete — turns out to be incomplete.
+
+Research from Roundtable (May 2026) tested frontier models (Claude, GPT, Gemini) and smaller open-source models against a 30-task benchmark called CogCAPTCHA30, which combined traditional visual CAPTCHAs with cognitive psychology tasks measuring decision-making, memory, perception, and reasoning. Key findings:
+
+- **Output equivalence does not imply process equivalence.** Models match human accuracy on many tasks but solve them through measurably different sequences of actions — different click patterns, direction changes, and selection behavior.
+- **Frontier models are less humanlike than smaller models.** Claude, GPT, and Gemini showed *greater* divergence from human behavioral patterns than smaller open-source models like Qwen. This is counterintuitive: capability and humanlikeness move in opposite directions at the frontier.
+- **The most humanlike model was Centaur**, fine-tuned on 10 million human choices across 160 cognitive experiments — suggesting that behavioral humanlikeness requires explicit training on human behavioral data, not just capability.
+- **Cloudflare Turnstile performs poorly against AI agents** because it primarily focuses on device and network characteristics, which AI agents can bypass. The author confirmed this in the HN discussion.
+- **The detection mechanism is behavioral, not output-based.** A "Process Turing Test" — monitoring the process by which a task is solved, not just the answer — is substantially harder for AI agents to pass than a standard output-accuracy check.
+
+The practical implication for computer-use agents: CAPTCHA systems designed around process-level behavioral signals rather than answer correctness can detect current-generation AI agents even when those agents solve the tasks accurately. When AI is given complete access to the discriminator's logic, it can narrow the gap — but this advantage disappears under cross-task generalization, where the discriminator evaluates tasks the AI has not seen.
+
+Several practical notes:
+
+- CAPTCHAs work primarily through **economic friction** rather than perfect detection; 3–5 seconds of human time per challenge compounds exponentially across automated request volumes.
+- The real detection signal is often **browser fingerprinting and behavioral telemetry gathered during the challenge**, not the challenge answer itself.
+- Current detection approaches create **collateral damage for privacy-conscious users** (VPN users, privacy browsers) while missing specialized anti-detect tooling used by actual scrapers.
+- Claude Opus with browser tools reportedly succeeds on Google reCAPTCHA ~95% of the time but fails on hCaptcha.
+
 ## Use Cases
 
 - Automating web research and form-filling

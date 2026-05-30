@@ -1,5 +1,77 @@
 # Log
 
+## [2026-05-29] — Session-level prompt coherence as a planning quality signal
+
+**Source:** "You can just say it" (https://news.ycombinator.com/item?id=48324853); article at noperator.dev/posts/you-can-just-say-it/. Score: 191, 82 comments. Posted by antirez.
+
+**Technical:** Pages updated: concepts/planning.md (new paragraph added to "Input Quality Is a Prerequisite" section on session-level prompt coherence).
+
+**Summary:** The article argues that "AI slop" — output that feels hollow or low-quality — arises not from AI tool use per se, but from output generated without genuine intent behind it. The technically actionable extension of this comes from antirez's top comment, which maps the concept directly onto coding agents: the sum of all prompts given during an AI-assisted coding session constitutes the de facto specification of the software. Purposeful prompts that progressively refine a consistent intent compose into something like an executable specification; reactive course-corrections ("it doesn't work, retry") add steering without adding intent and compound ambiguity rather than resolving it. This is a distinct refinement of the existing "Input Quality Is a Prerequisite" principle, which addressed individual prompt quality. The new angle is session-level: coherence across the whole sequence of steering matters, not just the clarity of any single prompt. Added to planning.md as a paragraph linking this framing to the Verifiable Constraints page's treatment of spec coherence as the root constraint on downstream correctness.
+
+## [2026-05-29] — Inference speed as an agentic loop design variable: memory bandwidth is the bottleneck
+
+**Source:** "Real-time LLM Inference on Standard GPUs: 3k tokens/s per request" (https://news.ycombinator.com/item?id=48321076); article at blog.kog.ai. Score: 195, 90 comments.
+
+**Technical:** Pages updated: concepts/agentic-loop.md (new "Inference Speed and Agentic Throughput" section added before Key Invariants), overview.md (inference speed paragraph added under Where Things Stand).
+
+**Summary:** Kog AI published a blog post demonstrating ~3,000 tokens/second on a 2B parameter model (FP16, no quantization) using 8× AMD MI300X GPUs, and ~2,100 tokens/second on 8× NVIDIA H200, via three software optimizations: a monokernel architecture eliminating kernel-launch overhead, custom inter-GPU communication collectives (KCCL) achieving sub-3-microsecond latency versus ~8 microseconds with vendor libraries, and a Laneformer architecture implementing Delayed Tensor Parallelism to overlap communication with computation.
+
+The HN discussion (90 comments) was substantive but critical. The most consistent objections: "standard GPUs" is a misleading framing — AMD MI300X and NVIDIA H200 are high-end datacenter hardware; the benchmark uses a 2B model while frontier model deployments use 30B–400B+ parameter models; and Taalas (15,000 tok/s with 3-bit quantization) was not included in the comparison despite being a natural reference point. The Kog author (gaeld) responded directly, acknowledging the comparison limitations and explaining that Taalas's 3-bit quantization made it incommensurable with their FP16 comparison. They also projected that their approach would yield 1,000+ tok/s on frontier models like GPT-OSS-120B on current hardware and up to 4,000 tok/s on next-generation GPUs, based on the memory-bandwidth-to-parameter ratio.
+
+The core technical insight — that single-request inference at batch size 1 is bottlenecked by memory bandwidth, not FLOP count, because each token requires moving model weights through GPU memory — is well-established and durable regardless of Kog's specific numbers or the benchmarking limitations. This insight has a direct consequence for agent builders: because agentic loops compound inference latency across many sequential steps, inference throughput is a configurable design parameter, not a fixed backdrop. Added a new section to the Agentic Loop page documenting this bottleneck, the software-layer techniques that address it, and the practical framing for agent builders. Also added a brief paragraph to the overview noting inference speed as an underappreciated agentic design variable.
+
+Note: Kog's inference engine is proprietary and not open-source. The specific benchmark numbers (on a 2B model) are unlikely to generalize directly to frontier workloads.
+
+## [2026-05-29] — CAPTCHAs can detect AI agents via process-level behavioral signals
+
+**Source:** "CAPTCHAs can still detect AI agents" (https://news.ycombinator.com/item?id=48324910); article at research.roundtable.ai/captchas-detect-ai/. Score: 61, 48 comments.
+
+**Technical:** Pages updated: concepts/computer-use.md (new "CAPTCHAs and Agent Detection" section).
+
+**Summary:** Research from Roundtable (three cognitive science PhDs from Princeton/UC Berkeley) tested frontier models (Claude, GPT, Gemini) and smaller open-source models against CogCAPTCHA30 — a 30-task battery combining visual CAPTCHAs with cognitive psychology tasks. The central finding is that output equivalence does not imply process equivalence: AI agents match human accuracy on many tasks but produce measurably different behavioral signatures (click patterns, direction changes, overselection behavior). A "Process Turing Test" — discriminating based on how a task is solved rather than whether it is solved correctly — can reliably detect current-generation AI agents.
+
+Two counterintuitive findings: (1) frontier models (Claude, GPT, Gemini) are *more* divergent from human behavioral patterns than smaller open-source models like Qwen — capability and humanlikeness move in opposite directions at the frontier; (2) the most humanlike model was Centaur, fine-tuned on 10M+ human behavioral choices across 160 cognitive experiments, suggesting behavioral humanlikeness requires dedicated training on human behavioral data. When AI agents are given access to the full discriminator logic they can narrow the gap, but this advantage collapses under cross-task generalization.
+
+The HN discussion added practical grounding: Cloudflare Turnstile performs poorly against AI agents because it relies on device/network signals rather than behavioral ones; CAPTCHAs function primarily as economic friction (time cost compounding across request volumes) rather than absolute barriers; the actual detection signal is often browser fingerprinting gathered during the challenge window, not the challenge answer; Claude Opus with browser tools reportedly passes Google reCAPTCHA ~95% of the time but fails on hCaptcha. Discussion also surfaced the persistent tension between bot detection and collateral damage to legitimate privacy-tool users.
+
+Added to the Computer Use page because CAPTCHAs are a direct and increasingly relevant obstacle for browser-navigating agents, and this research represents a durable finding (behavioral detection is harder to close than output-accuracy gaps) that practitioners building such agents should know about.
+
+## [2026-05-29] — Zot: single-binary Go coding agent harness with swarm and RPC mode
+
+**Source:** "Show HN: Zot – Yet another coding agent harness" (https://news.ycombinator.com/item?id=48319524); site at zot.sh. Score: 61, 60 comments.
+
+**Technical:** Pages created: tools/zot.md (new). Pages updated: index.md (Zot added to Tools), tools/pi.md (Zot added to Relation to Alternatives and See Also).
+
+**Summary:** Zot is a minimal coding agent harness written in Go and distributed as a single static binary — no Docker, no Node runtime, no Python environment. It supports 30+ LLM providers (Anthropic, OpenAI, Google, DeepSeek, Ollama, and others) with user-owned API credentials and no intermediary gateway. The four built-in tools (read, write, edit, bash) match what Pi provides. Sessions are stored as JSONL transcripts with resumption, branching, and auto-compaction at 85% context utilization.
+
+Two features distinguish Zot from Pi in the same niche: a built-in swarm (background subagents working in parallel on independent tasks within a single session, without requiring an external orchestration layer), and an RPC mode that exposes the agent loop via JSON-RPC subprocess protocol for embedding in other applications. The Go implementation is itself a differentiator — several HN commenters cited TypeScript and JavaScript ecosystem complexity as a reason to prefer a compiled binary.
+
+The HN discussion (60 comments) had one standout practical review: a user reported 3–5x productivity gains over competitors, fast startup, and successful extension with Gmail and web-browsing skills. The creator's framing was explicitly non-competitive with Pi, which he described as "quite possibly the best OSS tool." One concern flagged in the thread: Zot reportedly spoofs Claude Code API requests (using a `-p` flag), which may violate Anthropic's terms of service and will break once Anthropic implements request signing — worth monitoring for Claude users.
+
+Zot is the second Go coding agent harness to enter this space (after a cluster of TypeScript and Python tools) and is the most direct alternative to Pi for teams that prefer Go or want a zero-dependency binary.
+
+## [2026-05-29] — Quantified MCP context cost and latency; deferred tool loading as mitigation
+
+**Source:** "MCP is dead?" (https://news.ycombinator.com/item?id=48330436); article at quandri.io/engineering-blog/mcp-is-dead. Score: 55, 49 comments.
+
+**Technical:** Pages updated: tools/mcp.md (Tradeoffs section substantially expanded with concrete token cost measurements, latency benchmarks, deferred tool loading as a mitigation, and clearer when-to-prefer-alternatives guidance).
+
+**Summary:** The article measures MCP's context cost in a production stack: four connected MCP servers consume approximately 21,000 tokens upfront — roughly 10.5% of Claude's 200K window — with the Linear server alone accounting for ~12,800 tokens for 42 tool definitions. Against a CLI baseline: the same Linear issue lookup cost ~200 tokens via CLI vs. ~13,000 via MCP, a roughly 65x difference. Latency numbers: MCP is ~3x slower per call than direct API access, ~9.4x slower on initialization. The HN discussion (49 comments) added an important nuance: deferred (lazy) tool loading was added to the MCP spec in late 2025, meaning schemas are fetched only when a tool is actually invoked rather than at startup — which largely addresses the context bloat criticism when used. The discussion also surfaced the article's framing as somewhat clickbait given that update, and noted a legitimate security-model distinction: executing arbitrary code and making an HTTP request are fundamentally different runtime environments, which MCP's structure preserves. mxstbr (OpenAI) observed that the real value of MCP is accessibility — connecting services that previously had no integration point — not the transport protocol itself. The MCP tradeoffs section was thin (one-line cons list); the new content gives practitioners concrete numbers and clearer conditional guidance on when MCP is and isn't the right choice.
+
+## [2026-05-29] — SQLite as a durable execution backend for AI agent workflows
+
+**Source:** "SQLite is all you need for durable workflows" (https://news.ycombinator.com/item?id=48326802); article at obeli.sk/blog/sqlite-is-all-you-need-for-durable-workflows/. Score: 323, 188 comments.
+
+**Technical:** Pages updated: concepts/durable-execution.md (new "SQLite as a Workflow Store" subsection added under Database-Backed Approaches; Obelisk added to See Also). Pages created: tools/obelisk.md (new). Index updated: tools/obelisk.md added.
+
+**Summary:** The post is a blog article by the author of Obelisk, a durable workflow system that supports SQLite (backed by Litestream async replication to S3) as an alternative to a shared Postgres database. The central argument: for AI agent workloads that are experimental and bursty, a fleet of disposable compute units each with their own SQLite file provides simpler ops, better fault isolation, and lower cost than a shared database — at the cost of a narrow durability gap from async replication.
+
+This is a direct follow-on to the earlier "Postgres is all you need for durable execution" post. The durable-execution concept page already covered Postgres-backed approaches; the SQLite variant is a meaningful addition because it has different operational characteristics (per-worker state, async replication, naturally partitioned) rather than being the same pattern at a different scale.
+
+The HN discussion (188 comments, well-engaged) surfaced significant real-world SQLite-at-scale experience: multiple commenters reported running millions of MAU or thousands of concurrent sessions on SQLite, with some noting performance advantages over Postgres on equivalent hardware. The main substantive counterpoints were SQLite's sequential write model (problematic for multi-writer scenarios), weak type enforcement, and the async replication gap. The thread generally converged on context-dependence: SQLite is appropriate for naturally partitioned, single-writer workloads; Postgres is appropriate for shared, high-availability requirements. DuckDB was cited by several commenters as an appealing middle ground with proper types and SQLite-like operational simplicity.
+
+Added a SQLite subsection to the durable-execution concept page documenting the deployment model and the key tradeoff (async replication gap vs. operational simplicity). Created an Obelisk tool page covering its architecture, storage backends, and deployment model.
+
 ## [2026-05-28] — Claude Code hooks as programmable middleware and undocumented configuration fields
 
 **Source:** "Claude Code – Everything You Can Configure That the Docs Don't Tell You" (https://news.ycombinator.com/item?id=48318174); article at buildingbetter.tech/p/i-read-the-claude-code-source-code. Score: 19, 1 comment (unrelated to content). Findings derived from `@anthropic-ai/claude-code@2.1.87` source code.

@@ -44,6 +44,14 @@ Tradeoffs:
 - Building the full feature set of a mature orchestrator on top of a database requires significant effort: retries with backoff, timeouts, cancellation, versioning, heartbeats, stuck-worker detection, fan-out/fan-in, long timers, and operator tooling all need to be built or assembled.
 - Works well as a starting point and for moderate-throughput systems; high-throughput or complex orchestration logic usually pushes teams toward a dedicated tool.
 
+#### SQLite as a Workflow Store
+
+A further simplification replaces the shared Postgres database with a per-worker SQLite file. Each worker owns its local SQLite database and writes an execution log there; durability comes from asynchronous replication of the file to object storage (e.g., via **Litestream** streaming to S3). The deployment model becomes a fleet of small, disposable compute units — micro-VMs or containers — each with its own self-contained state.
+
+The core tradeoff compared to a shared database: asynchronous replication means the most recent writes can be lost if the compute volume disappears before the last backup completes. For AI agent workloads that are experimental, bursty, and tolerant of occasional reruns, this is often acceptable. For higher availability requirements, a shared Postgres backend is more appropriate.
+
+**Obelisk** is a durable workflow system that uses this architecture, supporting both SQLite (with Litestream) and Postgres backends. See [Obelisk](../tools/obelisk.md).
+
 ### Workflow Frameworks with Built-in Durability
 
 Some agent frameworks bundle durable execution directly. LangGraph's persistence layer (checkpointers) stores graph state between steps, supporting resumable multi-step agents. This is narrower in scope than a full workflow orchestrator but sufficient for single-agent pipelines where replay semantics are simple.
@@ -74,3 +82,4 @@ For short, stateless agent calls where replay is cheap and side effects are reve
 - [Multi-Agent Coordination](multi-agent.md) — fan-out/fan-in patterns that durable execution supports
 - [Planning](planning.md) — long-horizon task decomposition that creates the need for checkpointing
 - [LangGraph](../tools/langgraph.md) — graph-based orchestration with built-in persistence/checkpointing
+- [Obelisk](../tools/obelisk.md) — durable workflow system with SQLite and Postgres backends

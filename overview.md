@@ -18,6 +18,8 @@ The core building block is settled: a model in a loop with tools. What remains a
 
 **Computer use** — agents that directly operate GUIs and browsers — is early but moving fast, with Anthropic and OpenAI both investing heavily. See [Computer Use](concepts/computer-use.md).
 
+**Inference speed** is an underappreciated variable in agentic loop design. Multi-step agents compound inference latency at every step, making per-call throughput a meaningful constraint for latency-sensitive workflows. The bottleneck for single-request inference is memory bandwidth, not compute — and as of mid-2026, software-layer optimizations (persistent kernels, custom GPU collectives, communication-computation overlap) are demonstrably closing the gap between commodity datacenter hardware and theoretical bandwidth limits. Agent builders should treat inference throughput as a configurable parameter, not a fixed constraint. See [Agentic Loop](concepts/agentic-loop.md).
+
 **Evaluation** remains the hardest unsolved problem. Agents produce long, branching trajectories that are expensive to label and hard to score automatically. LLM-as-judge and trajectory-based evaluation are the current pragmatic approaches. See [Evaluation](concepts/evaluation.md).
 
 ## Key Open Questions

@@ -45,6 +45,7 @@ The author's thesis (November 2025 blog post) is that RL-trained frontier models
 ## Relation to Alternatives
 
 - **vs. [Claude Code](claude-code.md):** Claude Code is a productized environment with editor integration, IDE plugins, MCP, hooks, and scheduled tasks. Pi is a hackable harness — multi-provider, no vendor-enforced behavior, no enterprise features out of the box.
+- **vs. [Zot](zot.md):** Both are minimal coding agent harnesses with multi-provider support and thin scaffolding. Pi is TypeScript with a richer extension ecosystem (2,000+ community packages) and startup backing (Earendil). Zot is Go, ships as a single binary, and includes a built-in swarm (parallel subagents) and an RPC embedding mode Pi lacks. Pi has no built-in multi-agent support; that requires extensions.
 - **vs. [LangGraph](langgraph.md):** LangGraph encodes workflow logic in a state machine; Pi delegates workflow judgment to the model. LangGraph is Python and general-purpose; Pi is TypeScript and coding-focused.
 - **vs. [OpenAI Agents SDK](openai-agents-sdk.md):** Python-first and OpenAI-native. Pi is TypeScript, multi-provider, and treats context efficiency as a first principle.
 - **vs. [AutoGen](autogen.md) / [CrewAI](crew-ai.md):** Those frameworks focus on [multi-agent coordination](../concepts/multi-agent.md) and role abstractions. Pi has no native sub-agent system; multi-agent patterns are built via extensions.
@@ -55,5 +56,6 @@ The author's thesis (November 2025 blog post) is that RL-trained frontier models
 - [Tool Use](../concepts/tool-use.md) — How Pi's four built-in tools fit the broader pattern
 - [Context Management](../concepts/context-management.md) — Pi's progressive skill disclosure and compaction approach
 - [Claude Code](claude-code.md) — The productized coding agent Pi is most often compared to
+- [Zot](zot.md) — Similar philosophy, Go implementation, with built-in swarm and RPC mode
 - [LangGraph](langgraph.md) — Graph-based orchestration; a different philosophy on workflow encoding
 - [OpenAI Agents SDK](openai-agents-sdk.md) — Python-native alternative from OpenAI
