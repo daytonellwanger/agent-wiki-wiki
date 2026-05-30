@@ -1,0 +1,19 @@
+# content repo: .github/workflows/notify-website.yml
+name: update-website
+on:
+  push:
+    branches: [main]
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.WEBSITE_REPO_PAT }}
+          script: |
+            await github.rest.repos.createDispatchEvent({
+              owner: 'daytonellwanger',
+              repo: 'agent-wiki-website',
+              event_type: 'content-updated',
+            })
