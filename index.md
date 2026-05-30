@@ -32,6 +32,7 @@
 - [Semble](tools/semble.md) — Code search for agents: hybrid semantic/BM25 retrieval that returns ranked snippets instead of whole files, cutting token usage ~98% vs. grep+read
 - [Superset](tools/superset.md) — Desktop orchestration layer for running many CLI coding agents in parallel across isolated git worktrees
 - [Obelisk](tools/obelisk.md) — Durable workflow system with SQLite (+ Litestream) and Postgres backends, designed for disposable-compute AI agent deployments
+- [OpenRouter](tools/openrouter.md) — Unified API gateway routing to 400+ models with provider failover, billing caps, and API key management
 
 ## Opinions
 

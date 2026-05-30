@@ -1,5 +1,21 @@
 # Log
 
+## [2026-05-30] — OpenRouter: unified LLM routing gateway for agent builders
+
+**Source:** "OpenRouter raises $113M Series B" (https://news.ycombinator.com/item?id=48338660); announcement at openrouter.ai/announcements/series-b. Score: 210, 91 comments. Posted by freeCandy.
+
+**Technical:** Pages created: tools/openrouter.md (new). Pages updated: index.md (OpenRouter added to Tools).
+
+**Summary:** The news itself — a $113M Series B led by CapitalG (Alphabet), with NVentures, ServiceNow Ventures, MongoDB Ventures, Snowflake Ventures, and Databricks Ventures participating — is business news and not the reason for this entry. The occasion surfaced a substantive practitioner discussion about OpenRouter's role in the agent ecosystem that warranted documenting the tool.
+
+OpenRouter is a unified API gateway that routes requests to 400+ models through a single OpenAI-compatible endpoint. It abstracts provider-specific APIs so that switching models requires changing a model ID string rather than rewriting integration code. The features practitioners cited most: billing caps (hard spend limits that most direct providers don't offer, valuable for public-facing apps at risk of abuse), per-key API management with expiry and spend limits (useful for delegating AI access to external users without sharing root credentials), provider-level failover, and a "meta" routing mode that selects an appropriately capable model for a given prompt to avoid paying for Opus when a cheaper model suffices.
+
+The core tradeoff the discussion converged on: the ~5% surcharge is easily justified during exploration and early development when you're testing many models, but harder to stomach at high volume on a fixed set of production models. Several commenters independently predicted that OpenRouter's value proposition depends partly on continued provider fragmentation — if the market consolidates to two or three providers, the switching cost argument weakens and the surcharge becomes the dominant consideration.
+
+Two signal-to-noise notes worth preserving: (1) simonw, who had been skeptical initially, described it as the lowest-friction way to try models and noted that billing caps are a genuine gap in direct provider offerings; (2) OpenRouter's model usage leaderboards are structurally unreliable — they show total token volume without unique-user counts, so a single high-volume application can dominate the rankings. This limitation was already documented in the Evaluation page from the May 28 Hy3/OpenRouter entry; the new tool page links back to it.
+
+The "open" in OpenRouter refers to access to many models, not to open-source software. The platform is proprietary and now VC-backed; some practitioners expressed concern about consumer-unfriendly changes under that incentive structure. A self-hosted encrypted alternative (trustedrouter.com) was mentioned in the discussion but is not widely adopted.
+
 ## [2026-05-29] — Session-level prompt coherence as a planning quality signal
 
 **Source:** "You can just say it" (https://news.ycombinator.com/item?id=48324853); article at noperator.dev/posts/you-can-just-say-it/. Score: 191, 82 comments. Posted by antirez.
