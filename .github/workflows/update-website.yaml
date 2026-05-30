@@ -1,4 +1,3 @@
-# content repo: .github/workflows/notify-website.yml
 name: update-website
 on:
   push:
