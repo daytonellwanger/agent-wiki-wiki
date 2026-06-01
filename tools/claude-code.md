@@ -29,6 +29,19 @@ Claude Code runs as a CLI process that wraps the Claude API. Each conversation i
 - **Effort Control** (added with Opus 4.8): a per-session setting that lets users trade reasoning depth for speed and rate-limit headroom. Higher effort levels trigger deeper reasoning at greater token cost; lower effort levels produce faster responses while preserving rate limits for longer sessions. The setting can be changed mid-session. Claude Code's rate limits were increased alongside this feature to accommodate the higher token consumption of maximum-effort runs.
 - **Dynamic Workflows** (research preview, added with Opus 4.8): enables Claude Code to plan work and orchestrate hundreds of parallel subagents within a single session. The primary use case documented by Anthropic is codebase-scale migrations across hundreds of thousands of lines of code. See [Claude Code Subagents](claude-code-subagents.md) for the underlying subagent system.
 
+## Output Styles
+
+Output styles let operators and users change how Claude Code responds — modifying the system prompt applied to every message in a session. Configured via `/config > Output style`. The selection is saved to `.claude/settings.local.json`. Operators can also build and distribute custom output style plugins.
+
+Built-in styles:
+- **Default**: standard response behavior.
+- **Explanatory**: Claude explains implementation choices and codebase patterns alongside its work.
+- **Learning**: collaborative, learn-by-doing mode. Claude adds `TODO(human)` markers at decision points — business logic, error handling, algorithm choices, architecture decisions — and asks you to implement those pieces rather than doing them itself. Provides educational insights formatted as starred callout blocks. Incurs additional token cost.
+
+The Learning style was initially available only to Claude for Education users before being opened to all users. The underlying mechanism is a plugin that fires a `SessionStart` hook, injecting additional system-level instructions at the start of every session. The plugin approach means custom teaching or guidance modes — constraining the agent to explain rather than implement — can be encoded as distributable packages rather than requiring per-project CLAUDE.md customization.
+
+CS336 at Stanford published a CLAUDE.md for their course that illustrates this constraint pattern manually: the file explicitly prohibits the agent from writing code, completing TODO sections, editing student files, or running bash commands, instead restricting it to explaining concepts, asking clarifying questions, suggesting sanity checks, and directing students to documentation. The built-in Learning style and the CS336 approach are converging on the same behavioral model — an agent constrained to guide rather than solve — via different mechanisms (plugin vs. CLAUDE.md).
+
 ## IDE Integration
 
 Available as extensions for VS Code and JetBrains IDEs, embedding the CLI experience inside the editor with a panel UI.

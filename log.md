@@ -1,5 +1,19 @@
 # Log
 
+## [2026-06-01] — Claude Code Output Styles: built-in plugin system for changing agent response behavior
+
+**Source:** "AI Agent Guidelines for CS336 at Stanford" (https://news.ycombinator.com/item?id=48359232); resource at github.com/stanford-cs336/assignment1-basics/blob/main/CLAUDE.md. Score: 279, 106 comments. Posted by prakashqwerty.
+
+**Technical:** Pages updated: tools/claude-code.md (new "Output Styles" section added before IDE Integration).
+
+**Summary:** Stanford's CS336 course published a CLAUDE.md that constrains the agent to a teaching role: no code generation, no TODO completion, no bash commands, no pointing to third-party implementations. The agent is restricted to explaining concepts, asking clarifying questions, suggesting sanity checks, and directing students to course materials. The post surfaced high engagement (279 points, 106 comments) primarily around academic integrity policy, but its technical significance for the wiki is the contrast with Claude Code's built-in Output Styles system.
+
+Output Styles, previously undocumented in the wiki, are a plugin-based system for modifying how Claude Code responds across an entire session by injecting additional system prompt instructions at the `SessionStart` hook. The built-in Learning style encodes exactly the behavioral model CS336 implemented manually via CLAUDE.md: the agent adds `TODO(human)` markers at decision points, asks users to implement meaningful code segments rather than doing them itself, and provides educational callout blocks explaining implementation choices. It was initially restricted to Claude for Education users before being opened broadly.
+
+The two approaches converge on the same idea — a guided-rather-than-solving agent — but via different mechanisms. Output Styles as distributable plugins generalize this pattern: any operator can encode a behavioral mode (teaching, review-only, explain-before-implementing) as a plugin rather than requiring each project to maintain its own CLAUDE.md customization.
+
+The HN discussion's most upvoted comment noted that a terse 30-line constraint file outperformed the verbose CS336 guidelines in practice, and proposed logging all agent interactions to track usage patterns. The broader debate about enforceability is a policy question rather than an agent architecture one and is not captured here.
+
 ## [2026-05-30] — OpenRouter: unified LLM routing gateway for agent builders
 
 **Source:** "OpenRouter raises $113M Series B" (https://news.ycombinator.com/item?id=48338660); announcement at openrouter.ai/announcements/series-b. Score: 210, 91 comments. Posted by freeCandy.
