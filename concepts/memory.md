@@ -33,10 +33,27 @@ A related but distinct approach from the Letta team, "sleep-time compute," runs 
 
 Both approaches share the intuition that compute invested before a query arrives is cheaper than compute at inference time, and that the standard "everything in the KV cache" design leaves efficiency on the table for long-running or multi-query workloads.
 
+## Organizational / Persistent Memory
+
+A distinct use case — relevant to agents running in enterprise or team contexts — is maintaining a persistent, company-wide knowledge store that agents consult across all sessions. The challenge is that information about an organization is scattered across Slack, email, documents, and calendars, and is neither a pure vector similarity problem nor a simple key-value store.
+
+One architectural pattern addressing this: ingest all sources into a hybrid knowledge graph + vector index, then maintain two layers of representation:
+
+- **Episodes**: raw source records — the actual Slack message, email thread, or document chunk, timestamped and attributed. These preserve fidelity.
+- **Facts**: extracted subject-predicate-object triples derived from episodes. These enable structured querying and reasoning.
+
+When facts conflict ("ship Friday" vs. "shipping Monday"), newer facts supersede older ones while the episode log preserves the full history. At query time, the system combines graph traversal (for structured relationships) with semantic embedding search (for fuzzy retrieval) and full-text search.
+
+Compared to pure RAG: the knowledge graph makes relationships between entities explicit and queryable; pure vector search treats all content as a flat pool of chunks. Compared to stateless MCP tool calls: because the store persists across sessions, agents accumulate organizational context rather than starting fresh each time.
+
+Access control is a first-order concern in multi-user deployments — different agents or users should see only the facts appropriate to their role.
+
+This pattern is less mature than RAG for document retrieval and introduces new maintenance overhead: keeping the graph consistent with a fast-moving organization requires real-time extraction (e.g., via webhooks) and deliberate conflict-resolution logic.
+
 ## Key Challenges
 
 - **What to store**: not everything is worth remembering; deciding what to write to memory is a hard problem.
-- **Context window pressure**: retrieved memory consumes tokens; poor retrieval wastes them on irrelevant content.
+- **Context window pressure**: retrieved memory consumes tokens; poor retrieval wastes them on irrelevant content. A sharper version of this failure: practitioners building memory systems frequently discover that injecting retrieved memories into context *hurts* performance more often than it helps — the model's attention is diluted across a large context populated with loosely relevant history rather than concentrated on the current task. The failure mode is subtle because the system appears to work (the memories are there), but output quality drops. The implication is that retrieval precision and injection thresholds matter more than recall: it's better to inject nothing than to inject low-confidence matches.
 - **Staleness**: external memory can go out of date, and in practice this is the primary failure mode for codified knowledge systems. When a subsystem changes without a corresponding spec update, agents generate code against stale information — wiring through deprecated paths, referencing migrated fields — producing bugs that are hard to detect because the agent's reasoning looks correct given what it was told. Two mitigations: (1) a *context drift detector* that flags Git commits touching a subsystem without a corresponding specification update, prompting the developer to review; (2) treating spec updates as part of the same session as code changes rather than as separate maintenance passes. Production deployments report roughly 1–2 hours per week of specification maintenance overhead at scale (~100K-line codebase).
 - **Compaction**: for long-running agents, conversation history must be summarized or truncated without losing critical information. See [Context Management](context-management.md).
 

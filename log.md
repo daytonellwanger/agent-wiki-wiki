@@ -1,5 +1,45 @@
 # Log
 
+## [2026-06-03] — Memory injection as a performance liability: context flooding hurts more often than it helps
+
+**Source:** "Show HN: Mnemo – local-first AI memory layer for any LLM (Rust, SQLite, petgraph)" (https://news.ycombinator.com/item?id=48389586); repo at github.com/zaydmulani09/mnemo. Score: 37, 17 comments. Posted by zaydmulani.
+
+**Technical:** Pages updated: concepts/memory.md (context window pressure bullet expanded with the memory injection failure mode — context flooding hurts performance more often than it helps, and retrieval precision matters more than recall).
+
+**Summary:** Mnemo is a Show HN for a local-first knowledge graph memory sidecar for LLMs: entity extraction, deduplication, a SQLite + petgraph knowledge graph, and a six-stage ranked retrieval pipeline (~4.2ms average latency). It's one of a known class of similar tools and doesn't warrant its own page. The durable contribution from the HN discussion is a practitioner observation (SwellJoe): builders of memory systems frequently discover that injecting retrieved memories into context hurts performance more often than it helps — the model's attention is diluted by loosely relevant history rather than concentrated on the task at hand. This is a sharper version of the "context window pressure" challenge already in the Memory page, which had framed the problem only as token waste. The new angle is that the failure is active rather than passive: it's not just that bad memories are wasted tokens, but that the presence of low-confidence memories in context degrades reasoning quality. The implication for practitioners: retrieval precision and injection thresholds matter more than recall.
+
+## [2026-06-03] — Leiden Declaration: mathematical community's formal response to AI reliability in proofs
+
+**Source:** "Mathematicians issue warning as AI rapidly gains ground" (https://news.ycombinator.com/item?id=48382052); article at science.org (paywalled). Score: 210, 251 comments. Posted by pseudolus.
+
+**Technical:** Pages updated: concepts/evaluation.md (new paragraph appended to "AI on Open Mathematical Problems" section covering the Leiden Declaration).
+
+**Summary:** The International Mathematical Union endorsed the Leiden Declaration on Artificial Intelligence and Mathematics in June 2026, drafted by 16 mathematicians including Michael Harris of Columbia. The declaration's core technical concern — and the reason it belongs in the evaluation page — is the verification problem: AI systems generate mathematical arguments through pattern prediction rather than formal understanding, producing outputs that can look like legitimate proofs but contain subtle errors hard to distinguish from valid reasoning. Because mathematics is cumulative, such errors propagate through subsequent work and become increasingly difficult to detect. The declaration does not call for rejecting AI; it recommends mandatory disclosure of AI tool use, independent human verification of AI-generated outputs, and maintained human authorship accountability. The HN discussion added a second concern: automating Erdős-type problems removes the tractable entry points that have historically scaffolded early-career mathematicians' development of domain expertise. The practical implication for agent builders extends beyond mathematics — the plausibility of AI-generated reasoning is not a reliable indicator of correctness, which connects directly to the evaluation page's existing guidance on LLM-as-judge calibration and the human expertise gap.
+
+## [2026-06-03] — Organizational memory for agents: episodes+facts hybrid pattern
+
+**Source:** "Launch HN: Hyper (YC P26) – Company brain to power agentic development" (https://news.ycombinator.com/item?id=48387095). Score: 62, 58 comments. Posted by shalinshah.
+
+**Technical:** Pages updated: concepts/memory.md (new "Organizational / Persistent Memory" section).
+
+**Summary:** Hyper is a YC P26 startup that ingests Slack, email, docs, and calendar data into a hybrid knowledge graph + vector index, giving agents a persistent company-wide memory that survives across sessions. The post is a product launch, but the architectural pattern it describes is worth capturing: maintaining two layers — raw *episodes* (timestamped source records) and extracted *facts* (subject-predicate-object triples) — with conflict resolution that lets newer facts supersede older ones while preserving the episode history. At query time, graph traversal, semantic search, and full-text search are combined.
+
+The key distinction from standard RAG is that the graph layer makes organizational relationships explicit and queryable rather than treating all content as flat chunks. The key distinction from stateless MCP tool calls is that the store persists across sessions, so agents accumulate context over time rather than starting fresh.
+
+The HN discussion surfaced a legitimate challenge: converting complex organizational hierarchies into triples oversimplifies nuance (e.g., AWS's relationship to Amazon collapses to a simple edge). It also raised a tension that MCP by design is session-stateless, which makes persistent organizational memory a complementary layer rather than a replacement.
+
+## [2026-06-03] — Enterprise AI cost governance: Uber's $1,500/month per-tool cap as a second response pattern
+
+**Source:** "Uber's $1,500/month AI limit is a useful signal for AI tool pricing" (https://news.ycombinator.com/item?id=48383056); article at simonwillison.net/2026/Jun/3/uber-caps-usage/. Score: 432, 541 comments. Posted by pdyc.
+
+**Technical:** Pages updated: tools/claude-code.md (new paragraph in "Enterprise Adoption Notes" section on Uber's cap and model routing cost strategy).
+
+**Summary:** Uber capped all employees at $1,500/month per AI coding tool in June 2026, with the budget applied per tool (so separate budgets for Claude Code and Cursor, for example). The context: Uber burned through its entire 2026 AI budget in four months. This is the second major enterprise cost-overrun story after the Microsoft/Claude Code pilot cancellation already documented in the wiki, but Uber's response differs — rather than canceling licenses, it instituted a usage cap as an ongoing governance mechanism.
+
+Simon Willison framed the cap as a reasonable pricing signal: at $1,500/month per tool, an engineer using two tools runs ~$36,000/year in AI tool spend, roughly 11% of median Uber SWE compensation. His own usage (~$1,000/month per provider) would stay within the limit with headroom, suggesting the cap constrains autonomous agentic workflows rather than supervised individual use.
+
+The HN discussion added a complementary cost strategy: practitioners argued for routing most coding tasks (especially changes under ~300 lines of code) to smaller "flash" models, which are roughly 10x cheaper and faster, reserving frontier models for code review and complex reasoning tasks. Defaulting all work to the most capable model is both expensive and often unnecessary.
+
 ## [2026-06-01] — Claude Code Output Styles: built-in plugin system for changing agent response behavior
 
 **Source:** "AI Agent Guidelines for CS336 at Stanford" (https://news.ycombinator.com/item?id=48359232); resource at github.com/stanford-cs336/assignment1-basics/blob/main/CLAUDE.md. Score: 279, 106 comments. Posted by prakashqwerty.
