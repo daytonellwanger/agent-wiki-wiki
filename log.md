@@ -1,5 +1,53 @@
 # Log
 
+## [2026-06-04] — KV-cache quantization as a capacity multiplier for long-context agents
+
+**Source:** "KVarN: Native vLLM backend for KV-cache quantization by Huawei" (https://news.ycombinator.com/item?id=48399974); repo at github.com/huawei-csl/KVarN. Score: 127, 13 descendants (thin discussion). Posted by theanonymousone.
+
+**Technical:** Pages updated: concepts/agentic-loop.md (new "KV-cache quantization" paragraph added to the Inference Speed and Agentic Throughput section).
+
+**Summary:** KVarN is a vLLM fork from Huawei CSL that applies a four-stage quantization pipeline to the KV cache: Hadamard rotation to spread per-channel outliers, iterative variance normalization via a Sinkhorn-like algorithm, and asymmetric low-bit quantization (default: 4-bit keys, 2-bit values). The claimed result is 3–5x more KV-cache capacity on fixed hardware, approximately 1.3x throughput gain over FP16, and accuracy that is effectively indistinguishable from FP16 (59.3% vs. 59.4% on AIME25, Qwen3-32B at 16K context). Critically, it requires no per-model calibration — it activates with a single vLLM flag.
+
+The technique is relevant to agent builders because KV cache is the memory that accumulates as context grows through an agentic session. More cache capacity per GPU means longer effective context windows on fixed hardware, which directly addresses the context pressure that forces truncation or compaction. Added to the Inference Speed and Agentic Throughput section of the Agentic Loop page as a complement to the existing throughput-optimization techniques, noting the connection to Context Management.
+
+The HN discussion was thin. The main exchange: a commenter wondered whether KVarN achieves *better* quality than FP16; the clarification was that it matches FP16 within margin of error (0.1 percentage point difference), not exceeds it. A separate commenter asked why it isn't a PR to vLLM proper; the implicit answer is that this is a research release, not an infrastructure contribution. The thin discussion means the repo itself carries all the weight.
+
+## [2026-06-04] — Latent Agents: internalizing multi-agent debate into a single model via post-training
+
+**Source:** "Latent Agents: A Post-Training Procedure for Internalized Multi-Agent Debate" (https://news.ycombinator.com/item?id=48405841); paper at arxiv.org/abs/2604.24881. Score: 26, 0 usable comments. Posted by PaulHoule.
+
+**Technical:** Pages updated: concepts/multi-agent.md (new "Internalizing debate into a single model" subsection added under Debate/Verification).
+
+**Summary:** The paper addresses a well-known cost problem with multi-agent debate: you get better reasoning but pay for multiple model invocations and long transcripts. The proposed technique — IMAD (Internalized Multi-Agent Debate) — distills multi-agent debate into a single model through a two-stage post-training pipeline. Stage one is supervised fine-tuning on debate transcripts to teach the model debate structure. Stage two is reinforcement learning with dynamic reward scheduling and progressive length clipping, which gradually forces the model to compress its reasoning rather than verbalize the full debate. The result: models that match or exceed explicit multi-agent debate on standard reasoning benchmarks (GSM8K, MMLU-Pro, Big-Bench Hard) while using only 6–21% of the tokens — a 5–16x efficiency gain. Tested on LLaMA-3.1 8B, Qwen 2.5 7B, and Mistral Nemo 12B.
+
+The mechanistic finding is notable for interpretability: internalization creates distinct agent-specific subspaces — identifiable directions in activation space corresponding to different reasoning perspectives (Chain-of-Thought, Self-Critique, Program-of-Thought). These subspaces are steerable, and the paper demonstrates that malicious or undesired agent personas can be suppressed via negative activation steering with minimal impact on general performance — unlike base models, which show performance collapse under similar steering.
+
+The HN discussion had no usable comments (both top-level replies were dead or flagged).
+
+## [2026-06-04] — Agent sandboxing pattern: gVisor + egress allowlist for autonomous code-executing agents
+
+**Source:** "Anthropic's open-source framework for AI-powered vulnerability discovery" (https://news.ycombinator.com/item?id=48403980); repo at github.com/anthropics/defending-code-reference-harness. Score: 355, 108 comments. Posted by binyu.
+
+**Technical:** Pages updated: concepts/agentic-loop.md (gVisor + egress allowlist paragraph added to "What Practitioners Actually Do" section), concepts/multi-agent.md (Anthropic harness added as third concrete example in "Task Decomposition" section).
+
+**Summary:** Anthropic published an open-source reference implementation for multi-agent vulnerability discovery. The pipeline shape — seven stages (recon, find, verify, dedupe, report, patch), ASAN as the verification gate, parallel agents scoped to narrow vulnerability classes — is the same narrow-and-parallel pattern already documented via Cloudflare's Project Glasswing and FuzzingBrain V2, and didn't change the existing wiki coverage there.
+
+The durable new contribution is the security infrastructure Anthropic built around the agents: gVisor (a user-space Linux kernel) layered over each container, combined with an egress allowlist that restricts outbound connections to the Claude API only. This is the concrete published reference for how to isolate autonomous code-executing agents that run untrusted inputs — preventing data exfiltration, payload downloads, or C2 communication even if an agent misbehaves or is manipulated. The harness also enforces that agents refuse to start outside the sandbox, making accidental unsandboxed execution a hard failure. This is meaningfully more specific than the existing agentic-loop.md note about running agents in sandboxed containers, and is the right guidance for builders deploying security, fuzzing, or automated patching pipelines. Added to the "What Practitioners Actually Do" section of agentic-loop.md.
+
+The HN discussion (tptacek) framed such harnesses as "shop jigs" — personal, customized infrastructure rather than reusable products — and noted the real value is in legacy codebase vulnerability discovery where human alternatives are expensive. Cost concerns (hundreds of dollars per run with frontier models) and false-positive triage burden were the other recurring themes, neither of which is novel to the wiki.
+
+## [2026-06-04] — Execution-judgment gap and concrete coding agent capability benchmarks
+
+**Source:** "When AI Builds Itself: Our progress toward recursive self-improvement" (https://news.ycombinator.com/item?id=48400842); article at anthropic.com/institute/recursive-self-improvement. Score: 411, 542 comments. By Marina Favaro and Jack Clark (Anthropic).
+
+**Technical:** Pages updated: concepts/evaluation.md (new "Coding Agent Capability Benchmarks" section with Anthropic internal data and quality caveats), concepts/planning.md (new "The Execution-Judgment Gap" section), overview.md (coding agent reliability paragraph extended with trajectory data and execution-judgment framing).
+
+**Summary:** Anthropic published an extended analysis of Claude's role in its own development pipeline, framed around the concept of "recursive self-improvement." The business framing — projecting toward a future where AI autonomously designs its successors — is speculative and not the wiki's concern. But the article contains the most detailed public data available on large-scale coding agent deployment in a production ML research organization, and the conceptual distinction it articulates between execution and judgment is durable.
+
+The concrete data: open-ended task success rates at 76% (up ~50 points in six months), task duration capability progressing from ~4-minute to ~12-hour tasks year-over-year, SWE-bench saturation achieved in roughly two years, and "research taste" (Claude's suggested experimental direction beating human judgment 64% of the time, up from 51% six months prior). These numbers are self-reported by a party with incentives to show rapid progress — the HN discussion surfaced this directly, with multiple commenters noting proximity to an IPO filing and questioning whether code volume metrics capture quality. Practitioners in the thread reported receiving 40,000-line AI-assisted PRs that couldn't be meaningfully reviewed, and described code merged to main without understanding. The numbers are captured with this caveat attached.
+
+The more durable contribution is the execution-judgment framing. The article states clearly that Claude excels at executing well-specified tasks but struggles with "research taste" — choosing which problems matter, setting direction, deciding what to work on. The 64% win rate on suggested experimental direction is a measurable, modest edge, not dominance. This framing extends the planning page's "Input Quality Is a Prerequisite" principle: the closer a task specification is to a complete executable description, the more reliable the agent; the more the agent must decide what to do rather than how to do it, the more unreliable it becomes. Added this as a named concept ("The Execution-Judgment Gap") to the planning page and cross-linked it from evaluation and overview.
+
 ## [2026-06-03] — Memory injection as a performance liability: context flooding hurts more often than it helps
 
 **Source:** "Show HN: Mnemo – local-first AI memory layer for any LLM (Rust, SQLite, petgraph)" (https://news.ycombinator.com/item?id=48389586); repo at github.com/zaydmulani09/mnemo. Score: 37, 17 comments. Posted by zaydmulani.
